@@ -11,7 +11,7 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: "Code",
-    Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
+    Svg: require("@site/static/img/undraw_hacker_mind.svg").default,
     description: (
       <>
         This isle contains code snippets and working scripts that are useful for
@@ -21,7 +21,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: "Patterns",
-    Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
+    Svg: require("@site/static/img/undraw_product_teardown.svg").default,
     description: (
       <>
         This isle will contain explanations and example implementations of
@@ -31,7 +31,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: "Process",
-    Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
+    Svg: require("@site/static/img/undraw_launching.svg").default,
     description: (
       <>
         This isle will contain explanations of some tools and process guidelines
