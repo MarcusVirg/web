@@ -1,6 +1,5 @@
 ---
-slug: introduction
-title: "Hello there!"
+title: "Introduction"
 date: 2022-04-24
 excerpt: "Introducting myself and this blog."
 tags: [Meta]

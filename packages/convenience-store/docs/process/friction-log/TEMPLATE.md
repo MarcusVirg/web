@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Template
 
-> If you are viewing this on the website, its better to copy the markdown from [source](https://github.com/MarcusVirg/convenience-store/tree/main/docs/process/friction-log/TEMPLATE.md)
+> If you are viewing this on the website, its better to copy the markdown from [source](https://github.com/MarcusVirg/web/blob/main/packages/convenience-store/docs/process/friction-log/TEMPLATE.md?plain=1)
 
 -- Copy the content below --
 
