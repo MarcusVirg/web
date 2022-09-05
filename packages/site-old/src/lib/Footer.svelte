@@ -1,1 +1,0 @@
-<footer>Marcus Virginia</footer>
