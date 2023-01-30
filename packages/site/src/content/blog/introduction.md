@@ -1,9 +1,9 @@
 ---
 title: "Introduction"
-date: 2022-04-24
+date: "2022-01-16T00:00"
 excerpt: "Introducting myself and this blog."
 tags: [Meta]
-draft: true
+isDraft: true
 ---
 
 <!-- markdownlint-disable MD025 -->

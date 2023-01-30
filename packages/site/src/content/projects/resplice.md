@@ -3,7 +3,7 @@ slug: resplice
 title: "Resplice"
 description: "Stop managing contacts, let contacts manage themselves."
 tags: [Svelte, PWA, Elixir, Postgres]
-draft: true
+isDraft: true
 ---
 
 <!-- markdownlint-disable MD025 -->

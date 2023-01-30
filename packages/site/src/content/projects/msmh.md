@@ -1,9 +1,8 @@
 ---
-slug: msmh
 title: "My Strengths My Health"
 description: "Determinants of health assessment platform for researchers."
 tags: [React, Koa, Postgres, Analytics]
-draft: true
+isDraft: true
 ---
 
 <!-- markdownlint-disable MD025 -->

@@ -1,9 +1,9 @@
 ---
 title: "Sick Pick: The Legend of Vox Machina"
-date: 2022-04-24
+date: "2022-04-24T00:00"
 excerpt: "This Amazon Prime release is one of the best animations to come out this year."
 tags: [Movies/TV, Sick Pick]
-draft: true
+isDraft: true
 ---
 
 <!-- markdownlint-disable MD025 -->

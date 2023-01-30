@@ -1,9 +1,9 @@
 ---
 title: "VeeCon, What A Time To Be Alive."
-date: 2022-04-24
+date: "2022-04-24T00:00"
 excerpt: "VeeCon was a Web3 conference that took place in Minneapolis, MN in 2022. I want to talk about my experience."
 tags: [Web3, NFT, Crypto]
-draft: true
+isDraft: true
 ---
 
 <!-- markdownlint-disable MD025 -->

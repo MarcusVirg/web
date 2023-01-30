@@ -1,9 +1,9 @@
 ---
 title: "Use Protobuf Instead Of JSON In Your Next App"
-date: 2022-04-24
+date: "2022-04-24T00:00"
 excerpt: "Protocol Buffers are superior to JSON in many ways. Let's go through why you should use them in your next application."
 tags: [Software, Full Stack, Data]
-draft: true
+isDraft: true
 ---
 
 <!-- markdownlint-disable MD025 -->

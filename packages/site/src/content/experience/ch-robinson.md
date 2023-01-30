@@ -1,8 +1,7 @@
 ---
-slug: ch-robinson
 title: "C.H. Robinson"
 tags: [Data Science, Python, React, Postgres]
-draft: true
+isDraft: true
 ---
 
 <!-- markdownlint-disable MD025 -->
