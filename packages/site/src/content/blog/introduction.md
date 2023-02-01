@@ -1,8 +1,8 @@
 ---
-title: "Introduction"
-date: "2022-01-16T00:00"
-excerpt: "Introducting myself and this blog."
-tags: [Meta]
+title: 'Introduction'
+date: '2022-01-16T00:00'
+excerpt: 'Introducting myself and this blog.'
+categories: [Meta]
 isDraft: true
 ---
 

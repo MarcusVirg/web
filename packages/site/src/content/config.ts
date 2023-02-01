@@ -5,7 +5,7 @@ const blog = defineCollection({
 		title: z.string(),
 		date: z.string().transform((str) => new Date(str)),
 		excerpt: z.string(),
-		tags: z.array(z.string()),
+		categories: z.array(z.string()),
 		isDraft: z.boolean()
 	})
 })
@@ -13,7 +13,7 @@ const blog = defineCollection({
 const experience = defineCollection({
 	schema: z.object({
 		title: z.string(),
-		tags: z.array(z.string()),
+		categories: z.array(z.string()),
 		isDraft: z.boolean()
 	})
 })
@@ -22,7 +22,7 @@ const projects = defineCollection({
 	schema: z.object({
 		title: z.string(),
 		description: z.string(),
-		tags: z.array(z.string()),
+		categories: z.array(z.string()),
 		isDraft: z.boolean()
 	})
 })

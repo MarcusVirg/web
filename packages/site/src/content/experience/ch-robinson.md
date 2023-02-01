@@ -1,6 +1,6 @@
 ---
-title: "C.H. Robinson"
-tags: [Data Science, Python, React, Postgres]
+title: 'C.H. Robinson'
+categories: [Data Science, Python, React, Postgres]
 isDraft: true
 ---
 

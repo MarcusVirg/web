@@ -1,7 +1,7 @@
 ---
-title: "My Strengths My Health"
-description: "Determinants of health assessment platform for researchers."
-tags: [React, Koa, Postgres, Analytics]
+title: 'My Strengths My Health'
+description: 'Determinants of health assessment platform for researchers.'
+categories: [React, Koa, Postgres, Analytics]
 isDraft: true
 ---
 
