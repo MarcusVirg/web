@@ -5,16 +5,20 @@ const blogCollection = await getCollection('blog')
 ---
 
 <Layout title="Blog">
-	<h1>Blog</h1>
+	<h1 class="max-w-xl text-4xl font-semibold text-slate-100 tracking-wide mb-8">
+		My writing on software engineering, product design, and other interests.
+	</h1>
 
-	<ul>
+	<div>
 		{
 			blogCollection.map((post) => (
-				<li>
+				<article>
 					{post.data.title}
-					{post.data.date.toLocaleDateString()}
-				</li>
+					<time datetime={post.data.date.toISOString()}>
+						{post.data.date.toDateString()}
+					</time>
+				</article>
 			))
 		}
-	</ul>
+	</div>
 </Layout>

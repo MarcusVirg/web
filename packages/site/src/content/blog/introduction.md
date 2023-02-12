@@ -6,9 +6,7 @@ categories: [Meta]
 isDraft: true
 ---
 
-<!-- markdownlint-disable MD025 -->
 # Introduction
-<!-- markdownlint-enable MD025 -->
 
 Hello there! I want to start by thanking you for checking out my blog.
 This blog will contain mostly Software Engineering topics

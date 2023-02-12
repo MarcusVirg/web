@@ -5,8 +5,6 @@ categories: [Svelte, PWA, Elixir, Postgres]
 isDraft: true
 ---
 
-<!-- markdownlint-disable MD025 -->
 # Resplice
-<!-- markdownlint-disable MD025 -->
 
 TODO

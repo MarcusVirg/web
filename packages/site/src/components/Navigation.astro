@@ -1,5 +1,58 @@
-<nav class="w-full">
-	<div class="max-w-3xl p-8">
-		<h1>Marcus Virginia's Blog</h1>
-	</div>
-</nav>
+---
+const navItems = [
+	{
+		name: 'About',
+		href: '/about'
+	},
+	{
+		name: 'Blog',
+		href: '/blog'
+	},
+	{
+		name: 'Projects',
+		href: '/projects'
+	},
+	{
+		name: 'Experience',
+		href: '/experience'
+	},
+	{
+		name: 'Uses',
+		href: '/uses'
+	}
+]
+---
+
+<div
+	class="fixed bottom-0 md:top-0 left-0 w-full flex items-center justify-center h-max dark:text-slate-100 p-4"
+>
+	<nav
+		class="px-6 dark:text-slate-200 max-w-full overflow-auto flex space-x-6 font-medium text-sm rounded-full dark:bg-zinc-800/90 shadow-lg shadow-zinc-800/5 ring-1 dark:ring-white/10 backdrop-blur"
+	>
+		{
+			navItems.map((item) => (
+				<a
+					href={item.href}
+					class:list={[
+						'relative transition hover:text-brand-blue font-semibold tracking-wide py-3',
+						{
+							'text-transparent bg-clip-text bg-gradient-to-br from-brand-blue to-brand-violet':
+								Astro.url.pathname === item.href
+						}
+					]}
+				>
+					{item.name}
+					<div
+						class:list={[
+							{
+								hidden: Astro.url.pathname !== item.href,
+								'absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-brand-blue to-brand-violet rounded-full':
+									Astro.url.pathname === item.href
+							}
+						]}
+					/>
+				</a>
+			))
+		}
+	</nav>
+</div>

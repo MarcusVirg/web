@@ -6,8 +6,6 @@ categories: [Movies/TV, Sick Pick]
 isDraft: true
 ---
 
-<!-- markdownlint-disable MD025 -->
 # Sick Pick: The Legend of Vox Machina
-<!-- markdownlint-disable MD025 -->
 
 TODO
