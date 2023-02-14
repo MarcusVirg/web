@@ -1,30 +1,16 @@
-import { z, defineCollection } from 'astro:content'
+import { defineCollection } from 'astro:content'
+import { blogSchema, experienceSchema, projectSchema } from './_schemas'
 
 const blog = defineCollection({
-	schema: z.object({
-		title: z.string(),
-		date: z.string().transform((str) => new Date(str)),
-		excerpt: z.string(),
-		categories: z.array(z.string()),
-		isDraft: z.boolean()
-	})
+	schema: blogSchema
 })
 
 const experience = defineCollection({
-	schema: z.object({
-		title: z.string(),
-		categories: z.array(z.string()),
-		isDraft: z.boolean()
-	})
+	schema: experienceSchema
 })
 
 const projects = defineCollection({
-	schema: z.object({
-		title: z.string(),
-		description: z.string(),
-		categories: z.array(z.string()),
-		isDraft: z.boolean()
-	})
+	schema: projectSchema
 })
 
 export const collections = {

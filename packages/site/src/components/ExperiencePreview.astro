@@ -1,0 +1,73 @@
+---
+import { Icon } from 'astro-icon'
+import { getCollection } from 'astro:content'
+
+const experienceCollection = await getCollection('experience', ({ data: post }) =>
+	import.meta.env.PROD ? !post.isDraft : true
+)
+---
+
+<div class="p-6 rounded-2xl border border-zinc-700/40">
+	<h4 class="flex font-semibold tracking-wider space-x-4 text-brand-blue">
+		<Icon name="briefcase" />
+		<span class="text-zinc-100">Experience</span>
+	</h4>
+
+	<div class="mt-6 space-y-4">
+		{
+			experienceCollection
+				.sort((a, b) => b.data.startDate.getTime() - a.data.startDate.getTime())
+				.map((xp) => (
+					<div class="flex w-full space-x-4">
+						<div class="h-10 w-10 relative flex items-center justify-center rounded-full bg-zinc-500" />
+						<div class="flex flex-col flex-1">
+							<h4 class="text-zinc-100 font-semibold tracking-wider">
+								{xp.data.company}
+							</h4>
+							<div class="flex flex-wrap justify-between w-full space-x-4 text-sm text-zinc-400">
+								<p>{xp.data.title}</p>
+								<div>
+									<time datetime={xp.data.startDate.toISOString()}>
+										{xp.data.startDate.toLocaleDateString('en-US', {
+											month: 'short',
+											year: 'numeric'
+										})}
+									</time>
+									<span aria-hidden="true">—</span>
+									<time
+										datetime={
+											xp.data.endDate
+												? xp.data.endDate.toISOString()
+												: new Date().toISOString()
+										}
+									>
+										{xp.data.endDate
+											? xp.data.endDate.toLocaleDateString('en-US', {
+													month: 'short',
+													year: 'numeric'
+											  })
+											: 'Present'}
+									</time>
+								</div>
+							</div>
+						</div>
+					</div>
+				))
+		}
+	</div>
+
+	<a
+		class="flex items-center justify-center rounded-md text-sm font-semibold mt-6 py-2 px-3 transition bg-zinc-800/50 text-zinc-300 hover:text-zinc-50 hover:bg-zinc-800 cursor-pointer active:ring focus:ring ring-offset-2 ring-offset-zinc-900 active:ring-brand-violet focus:ring-brand-violet"
+		href="#"
+	>
+		Download Resume
+	</a>
+</div>
+
+<style>
+	[astro-icon] {
+		height: 1.5rem;
+		width: 1.5rem;
+		fill: currentColor;
+	}
+</style>

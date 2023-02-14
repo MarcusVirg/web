@@ -1,9 +1,46 @@
 ---
+import { Image } from '@astrojs/image/components'
+import Socials from '../components/Socials.astro'
 import Layout from '../layouts/Layout.astro'
+import portfolioImage from '../images/portfolio.jpg'
+import BlogPreview from '../components/BlogPreview.astro'
+import ExperiencePreview from '../components/ExperiencePreview.astro'
+import ProjectsPreview from '../components/ProjectsPreview.astro'
 ---
 
 <Layout title="Marcus Virginia">
 	<section>
-		<h1></h1>
+		<Image
+			src={portfolioImage}
+			alt="Marcus Virginia Drawing"
+			width={64}
+			height={64}
+			format="webp"
+			class="rounded-full ring ring-offset-4 ring-offset-zinc-900 ring-brand-blue"
+		/>
+		<h1 class="max-w-xl text-4xl font-semibold text-slate-100 tracking-wide my-8">
+			Software engineer, amateur designer, and lover of all things tech.
+		</h1>
+
+		<p class="text-zinc-400 mb-8">
+			I'm Marcus, a software engineer currently based in Minneapolis, MN. I develop
+			software and applications on humanity's most important and significant
+			infrastructure, the web.
+		</p>
+
+		<Socials />
+	</section>
+
+	<section
+		class="flex flex-col md:flex-row justify-between mt-16 max-md:space-y-8 md:space-x-8"
+	>
+		<div class="flex-1">
+			<BlogPreview />
+		</div>
+
+		<div class="space-y-10">
+			<ExperiencePreview />
+			<ProjectsPreview />
+		</div>
 	</section>
 </Layout>

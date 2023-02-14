@@ -1,0 +1,48 @@
+---
+import { Icon } from 'astro-icon'
+
+const socials = [
+	{
+		name: 'mastodon',
+		icon: 'logo-mastodon',
+		url: 'https://mastodon.social/@marcusvirginia'
+	},
+	{
+		name: 'instagram',
+		icon: 'logo-instagram',
+		url: 'https://www.instagram.com/marcusjvirginia/'
+	},
+	{
+		name: 'github',
+		icon: 'logo-github',
+		url: 'https://github.com/MarcusVirg'
+	},
+	{
+		name: 'linkedin',
+		icon: 'logo-linkedin',
+		url: 'https://www.linkedin.com/in/marcusvirginia/'
+	}
+]
+---
+
+<div class="flex space-x-8">
+	{
+		socials.map((social) => (
+			<a
+				class="text-zinc-400 hover:text-zinc-200 transition"
+				aria-label="Follow on mastodon"
+				href={social.url}
+			>
+				<Icon name={social.icon} />
+			</a>
+		))
+	}
+</div>
+
+<style>
+	[astro-icon] {
+		height: 2rem;
+		width: 2rem;
+		fill: currentColor;
+	}
+</style>

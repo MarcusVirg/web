@@ -18,6 +18,7 @@
 		"@fontsource/dosis": "^4.5.11",
 		"@fontsource/open-sans": "^4.5.14",
 		"astro": "^2.0.6",
+		"astro-icon": "^0.8.0",
 		"prettier-plugin-astro": "^0.8.0",
 		"sharp": "^0.31.3",
 		"tailwindcss": "^3.2.4"

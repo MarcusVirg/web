@@ -1,6 +1,7 @@
 ---
-title: 'C.H. Robinson'
-categories: [Data Science, Python, React, Postgres]
+title: 'Software Engineer'
+company: 'C.H. Robinson'
+startDate: '2020-01-10T00:00'
 isDraft: true
 ---
 

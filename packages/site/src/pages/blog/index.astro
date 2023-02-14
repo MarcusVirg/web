@@ -1,7 +1,10 @@
 ---
 import { getCollection } from 'astro:content'
 import Layout from '../../layouts/Layout.astro'
-const blogCollection = await getCollection('blog')
+
+const blogCollection = await getCollection('blog', ({ data: post }) =>
+	import.meta.env.PROD ? !post.isDraft : true
+)
 ---
 
 <Layout title="Blog">
