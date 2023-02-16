@@ -1,7 +1,9 @@
 ---
 title: 'My Strengths My Health'
 description: 'Determinants of health assessment platform for researchers.'
-categories: [React, Koa, Postgres, Analytics]
+logo: 'msmh-logo'
+categories: [Analytics, Koa, Postgres, React]
+sortOrder: 2
 isDraft: true
 ---
 

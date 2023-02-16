@@ -13,7 +13,7 @@ export type Post = z.infer<typeof blogSchema>
 export const experienceSchema = z.object({
 	title: z.string(),
 	company: z.string(),
-	icon: z.string().optional(),
+	logo: z.string().optional(), // Must be a .png file
 	startDate: z.string().transform((str) => new Date(str)),
 	endDate: z
 		.string()
@@ -27,7 +27,9 @@ export type Experience = z.infer<typeof experienceSchema>
 export const projectSchema = z.object({
 	title: z.string(),
 	description: z.string(),
+	logo: z.string().optional(), // Must be a .png file
 	categories: z.array(z.string()),
+	sortOrder: z.number(),
 	isDraft: z.boolean()
 })
 

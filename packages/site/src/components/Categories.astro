@@ -1,0 +1,11 @@
+---
+type Props = {
+	categories: string[]
+}
+
+const { categories } = Astro.props
+---
+
+<ol class="flex space-x-2">
+	{categories.map((category) => <li>{category}</li>)}
+</ol>

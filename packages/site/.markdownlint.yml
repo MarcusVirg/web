@@ -1,2 +1,7 @@
 MD025: false
 line-length: false
+no-inline-html:
+  allowed_elements:
+    - figure
+    - figcaption
+    - a

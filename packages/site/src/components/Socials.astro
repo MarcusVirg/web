@@ -1,5 +1,5 @@
 ---
-import { Icon } from 'astro-icon'
+import Icon from './Icon.astro'
 
 const socials = [
 	{
@@ -31,6 +31,7 @@ const socials = [
 			<a
 				class="text-zinc-400 hover:text-zinc-200 transition"
 				aria-label="Follow on mastodon"
+				rel="me"
 				href={social.url}
 			>
 				<Icon name={social.icon} />

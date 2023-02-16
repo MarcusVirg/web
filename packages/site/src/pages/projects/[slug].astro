@@ -1,0 +1,31 @@
+---
+import { CollectionEntry, getCollection } from 'astro:content'
+import Layout from '../../layouts/Layout.astro'
+import Markdown from '../../components/Markdown.astro'
+import Categories from '../../components/Categories.astro'
+
+export async function getStaticPaths() {
+	const projectEntries = await getCollection('projects')
+	return projectEntries.map((project) => ({
+		params: { slug: project.slug },
+		props: { project }
+	}))
+}
+
+type Props = {
+	project: CollectionEntry<'projects'>
+}
+
+const { project } = Astro.props
+const { Content } = await project.render()
+---
+
+<Layout title={project.data.title}>
+	<Markdown>
+		<div slot="header">
+			<!-- TODO: Add Logo and IconButtons for website and/or Github -->
+			<Categories categories={project.data.categories} />
+		</div>
+		<Content slot="content" />
+	</Markdown>
+</Layout>

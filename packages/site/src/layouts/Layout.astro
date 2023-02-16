@@ -14,15 +14,26 @@ const { title } = Astro.props
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover"
+		/>
+		<link rel="manifest" crossorigin="use-credentials" href="/manifest.json" />
+		<meta name="theme-color" content="#5A95D8" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+		<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5A95D8" />
+		<meta name="msapplication-TileColor" content="#5A95D8" />
+		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content="Personal website of Marcus Virginia" />
 		<title>{title}</title>
 	</head>
 	<body class="dark">
 		<Navigation />
 		<main
-			class="p-8 max-md:pb-24 md:pt-36 dark:text-slate-200 dark:bg-zinc-900 max-w-7xl m-auto ring-1 dark:ring-zinc-300/20 min-h-full"
+			class="p-8 max-md:pb-24 md:pt-36 md:p-16 dark:text-slate-200 dark:bg-zinc-900 max-w-7xl m-auto ring-1 dark:ring-zinc-300/20 min-h-full"
 		>
 			<slot />
 		</main>
@@ -61,5 +72,11 @@ const { title } = Astro.props
 	code {
 		font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
 			Bitstream Vera Sans Mono, Courier New, monospace;
+	}
+
+	:where([astro-icon]) {
+		height: 1.5rem;
+		width: 1.5rem;
+		fill: currentColor;
 	}
 </style>
