@@ -7,6 +7,14 @@ module.exports = {
 				'brand-blue': '#5A95D8',
 				'brand-violet': '#5651B3',
 				'brand-dark-purple': '#2D1623'
+			},
+			typography: {
+				DEFAULT: {
+					css: {
+						'code::before': { content: '' },
+						'code::after': { content: '' }
+					}
+				}
 			}
 		}
 	},
