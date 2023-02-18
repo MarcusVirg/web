@@ -1,28 +1,7 @@
 ---
 import Icon from './Icon.astro'
 
-const socials = [
-	{
-		name: 'mastodon',
-		icon: 'logo-mastodon',
-		url: 'https://mastodon.social/@marcusvirginia'
-	},
-	{
-		name: 'instagram',
-		icon: 'logo-instagram',
-		url: 'https://www.instagram.com/marcusjvirginia/'
-	},
-	{
-		name: 'github',
-		icon: 'logo-github',
-		url: 'https://github.com/MarcusVirg'
-	},
-	{
-		name: 'linkedin',
-		icon: 'logo-linkedin',
-		url: 'https://www.linkedin.com/in/marcusvirginia/'
-	}
-]
+import { socials } from '../content/_data'
 ---
 
 <div class="flex space-x-8">
@@ -30,7 +9,7 @@ const socials = [
 		socials.map((social) => (
 			<a
 				class="text-zinc-400 hover:text-zinc-200 transition"
-				aria-label="Follow on mastodon"
+				aria-label={`Follow on ${social.name}`}
 				rel="me"
 				href={social.url}
 			>
