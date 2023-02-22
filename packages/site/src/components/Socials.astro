@@ -1,12 +1,12 @@
 ---
 import Icon from './Icon.astro'
 
-import { socials } from '../content/_data'
+import { socialsData } from '../content/_data'
 ---
 
 <div class="flex space-x-8">
 	{
-		socials.map((social) => (
+		socialsData.map((social) => (
 			<a
 				class="text-zinc-400 hover:text-zinc-200 transition"
 				aria-label={`Follow on ${social.name}`}

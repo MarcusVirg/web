@@ -1,9 +1,40 @@
 ---
 import Layout from '../layouts/Layout.astro'
+
+import { usesData } from '../content/_data'
 ---
 
 <Layout title="Uses">
-	<section>
-		<h1>Uses</h1>
-	</section>
+	<h1 class="max-w-xl text-4xl font-semibold text-slate-100 tracking-wide mb-16">
+		Software, gadgets, and other goodies I use.
+	</h1>
+
+	<div class="space-y-16">
+		{
+			usesData.map(([title, items]) => (
+				<section class="md:border-l md:border-zinc-700/40 md:pl-6 flex flex-col md:flex-row max-md:space-y-8 md:space-x-24">
+					<h1 class="font-semibold text-2xl tracking-wider w-40 flex-none">
+						{title}
+					</h1>
+					<ul class="space-y-8">
+						{items.map(({ title, description, link }) => (
+							<li>
+								{link ? (
+									<a
+										class="text-lg text-brand-blue hover:text-brand-violet underline underline-offset-2"
+										href={link}
+									>
+										{title}
+									</a>
+								) : (
+									<p class="text-lg">{title}</p>
+								)}
+								<p class="text-zinc-400 mt-2">{description}</p>
+							</li>
+						))}
+					</ul>
+				</section>
+			))
+		}
+	</div>
 </Layout>

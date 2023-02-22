@@ -4,7 +4,7 @@ import Layout from '../layouts/Layout.astro'
 import Link from '../components/Link.astro'
 import Icon from '../components/Icon.astro'
 
-import { socials } from '../content/_data'
+import { socialsData } from '../content/_data'
 import aboutImage from '../images/port_one.jpg'
 ---
 
@@ -77,7 +77,7 @@ import aboutImage from '../images/port_one.jpg'
 			/>
 			<ul>
 				{
-					socials.map((social) => {
+					socialsData.map((social) => {
 						return (
 							<li class="mt-4">
 								<a
