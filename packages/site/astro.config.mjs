@@ -3,6 +3,7 @@ import image from '@astrojs/image'
 import prefetch from '@astrojs/prefetch'
 import sitemap from '@astrojs/sitemap'
 import tailwind from '@astrojs/tailwind'
+import svelte from '@astrojs/svelte'
 import getReadingTime from 'reading-time'
 import { toString } from 'mdast-util-to-string'
 
@@ -23,7 +24,8 @@ export default defineConfig({
 		}),
 		prefetch(),
 		sitemap(),
-		tailwind()
+		tailwind(),
+		svelte()
 	],
 	markdown: {
 		remarkPlugins: [readingTime],

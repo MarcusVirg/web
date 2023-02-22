@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content'
 import Layout from '../../layouts/Layout.astro'
+import ArticleTimeline from '../../components/ArticleTimeline.svelte'
 
 const blogCollection = await getCollection('blog', ({ data: post }) =>
 	import.meta.env.PROD ? !post.isDraft : true
@@ -12,16 +13,5 @@ const blogCollection = await getCollection('blog', ({ data: post }) =>
 		My writing on software engineering, product design, and other interests.
 	</h1>
 
-	<div>
-		{
-			blogCollection.map((post) => (
-				<article>
-					{post.data.title}
-					<time datetime={post.data.date.toISOString()}>
-						{post.data.date.toDateString()}
-					</time>
-				</article>
-			))
-		}
-	</div>
+	<ArticleTimeline client:load posts={blogCollection} />
 </Layout>
