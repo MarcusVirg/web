@@ -8,8 +8,6 @@ isDraft: true
 
 # Introduction
 
-Hello there! I want to start by thanking you for checking out my blog.
-This blog will contain mostly Software Engineering topics
-but I also plan to write about other things that I enjoy like Movies/TV, video games, or basketball.
+Hello there! I want to start by thanking you for checking out my blog. This blog will contain mostly Software Engineering topics but I also plan to write about other things that I enjoy like Movies/TV, video games, fashion, or basketball.
 
-Much of what I write will be based upon my own understanding, assumptions, and opinions
+All of what I write will be based upon my own understanding, options, and assumptions about the world.

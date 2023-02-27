@@ -11,16 +11,17 @@ const projectsCollection = await getCollection('projects', ({ data: project }) =
 <div class="p-6 rounded-2xl border border-zinc-700/40">
 	<h4 class="flex font-semibold tracking-wider space-x-4 text-brand-blue">
 		<Icon name="code-slash" />
-		<span class="text-zinc-100">Projects</span>
+		<span class="text-zinc-100">Recent Projects</span>
 	</h4>
 
 	<div class="mt-6 space-y-6">
 		{
 			projectsCollection
 				.sort((a, b) => a.data.sortOrder - b.data.sortOrder)
-				.map((xp) => {
-					const logo = xp.data.logo
-						? import(`../images/${xp.data.logo}.png`)
+				.slice(0, 3)
+				.map((project) => {
+					const logo = project.data.logo
+						? import(`../images/${project.data.logo}.png`)
 						: import('../images/placeholder-logo.png')
 
 					return (
@@ -28,12 +29,12 @@ const projectsCollection = await getCollection('projects', ({ data: project }) =
 							<div class="absolute -inset-y-2 inset-x-2 z-0 scale-95 bg-zinc-800/50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 sm:-inset-x-6 sm:rounded-2xl" />
 							<a
 								class="relative flex w-full space-x-4 items-center"
-								href={`/projects/${xp.slug}`}
+								href={`/projects/${project.slug}`}
 							>
 								<div class="relative h-10 w-10 flex items-center overflow-hidden justify-center rounded-full bg-zinc-800 shadow-md shadow-zinc-800/5 border border-zinc-700/50">
 									<Image
 										src={logo}
-										alt={`Logo for ${xp.data.title}`}
+										alt={`Logo for ${project.data.title}`}
 										width={28}
 										height={28}
 										format="webp"
@@ -42,9 +43,9 @@ const projectsCollection = await getCollection('projects', ({ data: project }) =
 								</div>
 								<div class="flex flex-col flex-1">
 									<h4 class="text-zinc-100 font-semibold tracking-wider">
-										{xp.data.title}
+										{project.data.title}
 									</h4>
-									<p class="text-sm text-zinc-400">{xp.data.description}</p>
+									<p class="text-sm text-zinc-400">{project.data.description}</p>
 								</div>
 								<div class="text-brand-blue">
 									<Icon name="chevron-forward" />

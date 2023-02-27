@@ -42,7 +42,7 @@ export const usesData: [string, UsesItem[]][] = [
 			{
 				title: 'LG UltraGear QHD 34-inch Curved Monitor',
 				description:
-					"A really solid HDR monitor with a 144Hz refresh rate, running at 3440x1440 resolution. Its great for gaming and productivity with all this screen realestate. I think its a really good option if you want an HDR monitor that won't break the bank.",
+					"A really solid HDR monitor with a 144Hz refresh rate, running at 3440x1440 resolution. Its great for gaming and productivity with all this screen real estate. I think its a really good option if you want an HDR monitor that won't break the bank.",
 				link: 'https://www.amazon.com/gp/product/B08DWD38VX'
 			},
 			{
@@ -126,7 +126,7 @@ export const usesData: [string, UsesItem[]][] = [
 			{
 				title: 'Astro (Static Sites)',
 				description:
-					'Astro is my go to for building content focused static sites. It is like a super powered templating engine that lets you use svelte components and render them to HTML during build or allow svelte to run on the client with their Islands Architecture. I like that everything defaults to shipping no javascript. I would really like to see the Astro community grow.',
+					'Astro is my go-to for building content-focused static sites. It feels like a super-powered templating engine that lets you use svelte components and render them to HTML during build or allow svelte to run on the client with their Islands Architecture. I like that everything defaults to shipping no javascript. I would really like to see the Astro community grow.',
 				link: 'https://astro.build/'
 			},
 			{
