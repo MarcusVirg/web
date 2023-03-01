@@ -1,36 +1,15 @@
 ---
-const navItems = [
-	{
-		name: 'Home',
-		href: '/'
-	},
-	{
-		name: 'About',
-		href: '/about/'
-	},
-	{
-		name: 'Blog',
-		href: '/blog/'
-	},
-	{
-		name: 'Projects',
-		href: '/projects/'
-	},
-	{
-		name: 'Uses',
-		href: '/uses/'
-	}
-]
+import { navigationItems } from '../content/_data'
 ---
 
 <div
-	class="fixed z-20 bottom-0 md:top-0 left-0 w-full flex items-center justify-center h-max dark:text-slate-100 p-4"
+	class="fixed z-50 bottom-0 md:top-0 left-0 w-full flex items-center justify-center h-max dark:text-slate-100 p-4"
 >
 	<nav
 		class="px-6 dark:text-slate-200 max-w-full overflow-auto flex space-x-6 font-medium text-sm rounded-full dark:bg-zinc-800/90 shadow-lg shadow-zinc-800/5 ring-1 dark:ring-white/10 backdrop-blur"
 	>
 		{
-			navItems.map((item) => (
+			navigationItems.map((item) => (
 				<a
 					href={item.href}
 					class:list={[

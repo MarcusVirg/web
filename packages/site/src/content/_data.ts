@@ -1,3 +1,30 @@
+type NavigationItem = {
+	name: string
+	href: string
+}
+export const navigationItems: NavigationItem[] = [
+	{
+		name: 'Home',
+		href: '/'
+	},
+	{
+		name: 'About',
+		href: '/about/'
+	},
+	{
+		name: 'Blog',
+		href: '/blog/'
+	},
+	{
+		name: 'Projects',
+		href: '/projects/'
+	},
+	{
+		name: 'Uses',
+		href: '/uses/'
+	}
+]
+
 type Social = {
 	name: string
 	icon: string
@@ -126,7 +153,7 @@ export const usesData: [string, UsesItem[]][] = [
 			{
 				title: 'Astro (Static Sites)',
 				description:
-					'Astro is my go-to for building content-focused static sites. It feels like a super-powered templating engine that lets you use svelte components and render them to HTML during build or allow svelte to run on the client with their Islands Architecture. I like that everything defaults to shipping no javascript. I would really like to see the Astro community grow.',
+					'Astro is my go-to for building content-focused static sites, including this website. It feels like a super-powered templating engine that lets you use svelte components and render them to HTML during build or allow svelte to run on the client with their Islands Architecture. I like that everything defaults to shipping no javascript. I would really like to see the Astro community grow.',
 				link: 'https://astro.build/'
 			},
 			{

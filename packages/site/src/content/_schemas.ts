@@ -28,6 +28,8 @@ export const projectSchema = z.object({
 	title: z.string(),
 	description: z.string(),
 	logo: z.string().optional(), // Must be a .png file
+	website: z.string().optional(),
+	github: z.string().optional(),
 	categories: z.array(z.string()),
 	sortOrder: z.number(),
 	isDraft: z.boolean()
