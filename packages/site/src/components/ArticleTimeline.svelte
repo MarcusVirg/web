@@ -17,7 +17,7 @@
 
 <section>
 	<select
-		class="bg-zinc-800/90 text-slate-200 border border-white/10 rounded-lg px-4 py-2 focus:ring-2 focus:ring-brand-blue outline-none"
+		class="bg-zinc-800/90 text-slate-200 border border-white/10 rounded-lg px-4 py-2 focus:ring-2 focus:ring-brand-violet focus:outline-none"
 		on:change={(e) => (selectedCategory = e.currentTarget.value)}
 	>
 		{#each categories as category}
