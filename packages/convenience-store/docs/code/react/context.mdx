@@ -1,0 +1,107 @@
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+
+# React Context
+
+The Context API in React provides a way to pass data through the component tree without passing data via props.
+This API is best used for data that may be used in many children components across the tree like a UI theme or a current locale.
+
+You can think of data exposed via this API as 'global', however, I recommend avoiding most if not all global state if you can help it.
+Keep state local by default and only use the Context API to avoid deep prop drilling.
+
+One common usecase I will show is storing authentication data in an `AuthProvider` and pulling that data into a child component using the Context API.
+
+<Tabs>
+<TabItem value="auth-provider" label="AuthProvider.tsx">
+
+```ts
+import React, { useEffect, useMemo, useState } from 'react'
+
+type Session = {
+  // some session type
+}
+type User = {
+  // some user type
+}
+export type AuthContextState = {
+  session: Session
+  user: User
+}
+
+export const AuthContext = React.createContext<AuthContextState | undefined>(
+  undefined
+)
+
+type ProviderProps = {
+  loadingComponent?: React.ReactNode
+}
+
+function AuthProvider({
+  loadingComponent,
+  children
+}: React.PropsWithChildren<ProviderProps>) {
+  const [auth, setAuth] = useState<AuthContextState>()
+  const [isLoading, setIsLoading] = useState(false)
+  const [authErr, setAuthErr] = useState<Error | null>(null)
+
+  useEffect(() => {
+    const authenticateUser = async () => {
+      try {
+        setIsLoading(true)
+        setAuthErr(null)
+        // Call an api or library to authenticate a user
+        const res = await fetch('/auth')
+        const auth = await res.json()
+        setAuth(auth)
+        setIsLoading(false)
+      } catch (err) {
+        setAuthErr(err as Error)
+        setIsLoading(false)
+      }
+    }
+    authenticateUser()
+  }, [authClient])
+
+  if (authErr) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        {authErr.message}
+      </div>
+    )
+  }
+  if (isLoading || !context) {
+    return loadingComponent ? (
+      <>{loadingComponent}</>
+    ) : (
+      <div className="w-full h-full flex justify-center items-center">
+        Loading
+      </div>
+    )
+  }
+
+  return <AuthContext.Provider value={context}>{children}</AuthContext.Provider>
+}
+
+export default AuthProvider
+```
+
+</TabItem>
+<TabItem value="use-auth" label="useAuth.ts">
+
+```ts
+import { useContext } from 'react'
+import { AuthContext } from './AuthProvider'
+
+function useAuth() {
+  const context = useContext(AuthContext)
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider')
+  }
+  return context
+}
+
+export default useAuth
+```
+
+</TabItem>
+</Tabs>
