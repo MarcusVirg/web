@@ -1,0 +1,20 @@
+---
+import { navigationItems } from '../content/_data'
+---
+
+<footer
+	class="hidden dark:text-slate-200 dark:bg-zinc-900 max-w-7xl m-auto ring-1 dark:ring-zinc-300/20 p-12 md:flex justify-between items-center"
+>
+	<div class="space-x-4">
+		{
+			navigationItems.map((item) => (
+				<a class="hover:text-brand-blue" href={item.href}>
+					{item.name}
+				</a>
+			))
+		}
+	</div>
+	<p class="text-zinc-500 text-sm">
+		© {new Date().getFullYear()} Marcus Virginia. All rights reserved.
+	</p>
+</footer>

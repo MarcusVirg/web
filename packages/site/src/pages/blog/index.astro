@@ -1,0 +1,17 @@
+---
+import { getCollection } from 'astro:content'
+import Layout from '../../layouts/Layout.astro'
+import ArticleTimeline from '../../components/ArticleTimeline.svelte'
+
+const blogCollection = await getCollection('blog', ({ data: post }) =>
+	import.meta.env.PROD ? !post.isDraft : true
+)
+---
+
+<Layout title="Blog">
+	<h1 class="max-w-xl text-4xl font-semibold text-slate-100 tracking-wide mb-8">
+		My writing on software engineering, product design, and other interests.
+	</h1>
+
+	<ArticleTimeline client:load posts={blogCollection} />
+</Layout>

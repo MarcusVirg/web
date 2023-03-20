@@ -1,0 +1,14 @@
+<header class="m-auto w-full max-w-3xl mb-8">
+	<slot name="header" />
+</header>
+
+<article
+	class:list={[
+		'm-auto prose prose-zinc lg:prose-xl dark:prose-invert',
+		'prose-a:text-brand-blue prose-a:transition hover:prose-a:text-brand-violet',
+		'prose-hr:border-brand-violet prose-img:rounded-2xl',
+		'prose-figcaption:text-center prose-figcaption:text-sm prose-figcaption:italic'
+	]}
+>
+	<slot name="content" />
+</article>

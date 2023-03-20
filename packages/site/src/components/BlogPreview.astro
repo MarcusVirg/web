@@ -1,0 +1,19 @@
+---
+import { getCollection } from 'astro:content'
+import Article from '../components/Article.svelte'
+
+const blogCollection = await getCollection('blog', ({ data: post }) =>
+	import.meta.env.PROD ? !post.isDraft : true
+)
+---
+
+<h2 class="font-semibold text-3xl tracking-wider mb-10">Recent Posts</h2>
+
+<div class="flex flex-col space-y-14">
+	{
+		blogCollection
+			.sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+			.slice(0, 3)
+			.map((post) => <Article slug={post.slug} post={post.data} showDate />)
+	}
+</div>

@@ -1,0 +1,28 @@
+---
+import Icon from './Icon.astro'
+
+import { socialsData } from '../content/_data'
+---
+
+<div class="flex space-x-8">
+	{
+		socialsData.map((social) => (
+			<a
+				class="text-zinc-400 hover:text-zinc-200 transition"
+				aria-label={`Follow on ${social.name}`}
+				rel="me"
+				href={social.url}
+			>
+				<Icon name={social.icon} />
+			</a>
+		))
+	}
+</div>
+
+<style>
+	[astro-icon] {
+		height: 2rem;
+		width: 2rem;
+		fill: currentColor;
+	}
+</style>

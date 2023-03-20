@@ -1,12 +1,12 @@
 {
-  "name": "web",
-  "version": "0.1.0",
-  "private": true,
-  "workspaces": [
-    "packages/site"
-  ],
-  "scripts": {
-    "docs": "npm run --prefix packages/convenience-store start",
-    "site": "npm run --prefix packages/site dev"
-  }
+	"name": "web",
+	"version": "0.1.0",
+	"private": true,
+	"workspaces": [
+		"packages/*"
+	],
+	"scripts": {
+		"docs": "npm run --prefix packages/convenience-store start",
+		"site": "npm run --prefix packages/site dev"
+	}
 }
