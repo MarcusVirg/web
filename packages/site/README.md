@@ -52,3 +52,9 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+## Website Infrastructure
+
+The website itself is a static site running little Javascript.
+
+There is a comment system using Netlify functions as the compute later and upstash Redis as the datastore.

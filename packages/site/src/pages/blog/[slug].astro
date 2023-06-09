@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro'
 import Categories from '../../components/Categories.astro'
 import Markdown from '../../components/Markdown.astro'
 import IconContainer from '../../components/IconContainer.astro'
+import CommentList from '../../components/comments/CommentList.svelte'
 
 export async function getStaticPaths() {
 	const blogEntries = await getCollection('blog')
@@ -51,4 +52,6 @@ const {
 		</div>
 		<Content slot="content" />
 	</Markdown>
+
+	<CommentList client:visible blogId={post.slug} />
 </Layout>
