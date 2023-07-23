@@ -51,5 +51,5 @@ async function run(
 	return Object.values(commentAggregates)
 }
 
-const errorMessage = 'Cannot add comments at this time, please try again later.'
+const errorMessage = 'Cannot fetch comments at this time, please try again later.'
 export const handler = factory(run, errorMessage)

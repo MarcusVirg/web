@@ -33,9 +33,10 @@ function functionFactory<F extends Function>(runFunc: F, errorMessage: string) {
 				}
 			}
 
-			console.error(errorMessage, error)
+			console.error(error)
 			return {
 				statusCode: 500,
+				headers,
 				body: JSON.stringify({
 					error: errorMessage
 				})

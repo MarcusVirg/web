@@ -7,8 +7,7 @@ import { EventType, type CommentCreated, type Event } from './utils/events'
 async function run(e: HandlerEvent, _ctx: HandlerContext): Promise<CommentCreated> {
 	const store = storage.connect()
 
-	const body = JSON.parse(e.body || '{}')
-	const command = AddComment.parse(body)
+	const command = AddComment.parse(JSON.parse(e.body || '{}'))
 
 	const event: CommentCreated = {
 		blogId: command.blogId,

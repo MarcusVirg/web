@@ -2,11 +2,12 @@
 	import CommentForm from './CommentForm.svelte'
 
 	export let blogId: string
-	let comment = {
+	const INITIAL_COMMENT = {
 		blogId,
 		author: '',
 		comment: ''
 	}
+	let comment = INITIAL_COMMENT
 	let error: string | null = null
 
 	async function addComment() {
@@ -14,7 +15,12 @@
 			method: 'POST',
 			body: JSON.stringify(comment)
 		})
-		if (!res.ok) error = res.statusText
+		if (!res.ok) {
+			error = res.statusText
+			return
+		}
+
+		comment = INITIAL_COMMENT
 		return await res.json()
 	}
 </script>
