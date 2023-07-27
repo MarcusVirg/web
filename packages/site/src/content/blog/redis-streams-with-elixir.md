@@ -30,7 +30,7 @@ It is important to know that streams are append-only data structures, meaning yo
 
 Each entry in a stream consists of field value pairs similar to a dictionary or a different Redis data structure, `Hashes`. These field value pairs are space separated in the commands like so:
 
-```redis
+```sh
 XADD account:1:log * name Han Solo age 35
 ```
 
@@ -169,7 +169,7 @@ import Dotenvy
 
 source!([".env", System.get_env()])
 
-config :redis, redis_endpoint: env!("REDIS_ENDPOINT", :string)
+config RedisStreams, :redis, redis_endpoint: env!("REDIS_ENDPOINT", :string)
 ```
 
 This code imports `Config` and `Dotenvy` which pulls in the `source` function and `config` macro. We are passing the path of a `.env` file to source and telling Elixir to put a new config `:redis` that points to a keyword list. So we expect there to be a variable called `REDIS_ENDPOINT` in our .env file.
@@ -199,7 +199,7 @@ For the HTTP server, we can pass `Bandit` as our first child:
 For the store we will implement our own supervisor so we can pass a new module as the second child:
 
 ```elixir
-{RedisStreams.Store, Application.get_env(:redis)}
+{RedisStreams.Store, Application.get_env(RedisStreams, :redis)}
 ```
 
 We want to pass this new module our `:redis` config we defined earlier so it can get the connection string.
@@ -216,7 +216,7 @@ defmodule RedisStreams.Application do
   def start(_type, _args) do
     children = [
       {Bandit, plug: RedisStreams.Http},
-      {RedisStreams.Store, Application.get_env(:redis)}
+      {RedisStreams.Store, Application.get_env(RedisStreams, :redis)}
     ]
 
     opts = [strategy: :one_for_one, name: RedisStreams.Supervisor]
@@ -233,4 +233,40 @@ Redis is first and foremost an in-memory store with disk-based backups. This mea
 
 If you do think this will be an issue, it might be worth looking into a solution that builds on top of the base open-source redis to solve the issue of large event logs. [Redis on Flash](https://redis.com/redis-enterprise/technology/redis-on-flash/) might be a good option if you want Redis enterprise support anyways. Another option I would recommend is [Upstash Streams](https://upstash.com/blog/redis-streams-beyond-memory).
 
-You could also implement something yourself and instead of storing the event payload inside the stream, you could store a location on another file system or database like a MongoDB uuid or an Amazon S3 bucket.
+You could also implement something yourself and instead of storing the event payload inside the stream, you could store a location to another file system or database like a MongoDB uuid or an Amazon S3 bucket.
+
+### Polling vs Block
+
+You might have noticed that we are polling directly in our application instead of using the [`BLOCK`](https://redis.io/commands/xread/) option for `XREAD`. To understand the why behind this, let's explore the alternatives and weight the tradeoffs.
+
+#### XREAD BLOCK With a Stream Per Account
+
+What if we did exactly what we are doing but used `BLOCK 60000` instead of `Process.sleep(1000)`? Well this seems good at first because we are only sending commands once every minute per socket connection instead of commands once per second per socket. So we consume less resources and another benefit is that the `XREAD` command would return right away if a new message is added to the stream.
+
+This approach has one major problem though. Now we are only using one global Redis connection for our application so the first socket connection would block all other connections from doing `XREAD`s for 1 minute. So to scale this, we would need one Redis connection for every websocket connection in our application. This might be the best approach for you if you have a small user base, however, by default a single Redis node can only handle [10k connections by default](https://redis.io/docs/reference/clients/#maximum-concurrent-connected-clients) so you will have to scale Redis nodes if you have more than 10k users connected at once, resulting in a much more complicated architecture.
+
+The cap for commands per second (which would be the limiting factor in the polling method) is much larger than 10k.
+
+#### XREAD BLOCK Many Streams At Once
+
+I haven't explored this option much but because `XREAD` supports reading many streams at once: `XREAD BLOCK 60000 account:1:log account:2:log 0 0`, you could potentially `XREAD` all account streams for the currently connected sockets all at different offsets.
+
+This command has the potentially to get huge. Imagine you have 10k connected users at once, your command would be a list of 10k stream keys and 10k offsets. There is also the problem of canceling the command when a new user connects to your application or a current user disconnects. Assuming Redis can handle very large commands, the implementation for this seems very complicated and would end up sending a new command for every socket connection/disconnection anyways.
+
+#### XREAD BLOCK With One Large Stream
+
+We could change our data model a bit and instead use a single stream for all accounts in our system. This isn't really a problem when adding entries since the size of the stream doesn't affect the speed of appending to that stream. As messages are read in with `XREAD` we could add `account_id` to the event and route that event to the correct websocket. The problem with this approach really shows itself when trying to read from this stream with a new websocket connection.
+
+A user won't always be connected to the application via websocket. So let's say our user, Han Solo, is currently offline and 3 events entered the stream for that specific user because another user, Princess Leia, interacted with them while they were offline. Now Leia is still online and is currently calling `XREAD` with a certain offset of messages that they themselves have read. Immediately Leia will skip over those 3 messages for Han because they aren't not for her. Finally Han comes online and needs to see messages but the `XREAD` command for the current Redis connection has already gone past those messages for Han.
+
+One solution would be that Han could send a new `XREAD` command with his own offset but now we are right back to [this problem](#xread-block-with-a-stream-per-account).
+
+Redis has a feature called [consumer groups](https://redis.io/docs/data-types/streams/#consumer-groups) that could solve this problem since each group has it's own offset in the stream: `XREADGROUP GROUP sockets account:1 STREAMS account:log 0`. You still need to define each consumer and their offset in the command anyways so we are back to [this problem](#xread-block-many-streams-at-once). We might as well go back to a stream per account since it will keep our reads faster with natural, per account, log partitioning.
+
+#### Polling
+
+So for these reasons, I decided polling seems to be the simplest option for this specific application and data model. As mentioned before, the biggest concern with polling is sending potentially unnecessary commands to the redis instance and wasting resources. Our commands per second volume would be a concern with many users connected to our applications but again that number is already pretty high per Redis node and we could scale to multiple Redis nodes if we needed to. Using `BLOCK` would definitely reduce our commands per second but even our `BLOCK` commands would have to do some kind of polling in the case of the `XREAD BLOCK` timing out, our poll intervals with block are just longer.
+
+Adjusting the polling interval might also be tricky. Because with our polling method we only check for new messages at the interval, a message could have been added to the stream but we will not see it right away like `XREAD BLOCK` would. This might make your system feel less "real-time" but that is probably okay for most applications and you could always speed it up by using a smaller interval time at the expensive of your requests per second. Using a 1 second interval is a good starting point and is probably "real-time" enough for your application. Combine this with some nice, client-side, optimistic updating and you applications will feel snappy.
+
+> If anyone knows of a better solution or would just like to chat about these tradeoffs, please feel free to [email me](/about).

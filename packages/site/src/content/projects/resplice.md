@@ -3,7 +3,7 @@ title: 'Resplice'
 description: 'Stop managing contacts, let contacts manage themselves.'
 logo: 'resplice-logo'
 website: 'https://www.resplice.com'
-categories: [Elixir, Postgres, PWA, Svelte]
+categories: [Elixir, Svelte, PWA]
 sortOrder: 1
 isDraft: false
 ---
