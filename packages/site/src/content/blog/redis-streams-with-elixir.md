@@ -1,6 +1,6 @@
 ---
 title: 'Redis Streams With Elixir: A Guide to Event Sourcing'
-date: '2023-07-25T00:00'
+date: '2023-07-31T00:00'
 excerpt: "This guide will show you how to implement a basic event sourcing system with Redis, Elixir, and Redix."
 categories: [Software, Full Stack, Redis, Elixir]
 isDraft: false
@@ -12,9 +12,7 @@ In the modern age of web applications, real-time data processing has become a cr
 
 As user interactions and events generate an ever-increasing flow of data, developers seek efficient solutions to handle, process, and deliver this stream of information in a timely manner. Combining the powerful concurrency model of Elixir with a battle-tested key value database, Redis, makes a great solution for a real-time event-sourcing system.
 
-In this post, we will take a look at what it looks like to use Redis Streams in an Elixir application using websockets. Afterwards you should have a good starting point to build your own real-time system whether it be a chat application, monitoring system, or anything other system that could benefit from event-sourcing.
-
-> I built the comment system for this blog using Redis Stream backed event-sourcing to record new posts.
+In this post, we will take a look at how to use Redis Streams in an Elixir application using websockets. Afterwards you should have a good starting point to build your own real-time system whether it be a chat application, monitoring system, or anything other system that could benefit from event-sourcing.
 
 [TLDR; just show me the code](https://github.com/MarcusVirg/sandbox/tree/main/concepts/redis-streams)
 
@@ -28,7 +26,7 @@ If you don't go through the tutorial, I recommend you at least read the [Caveats
 - Sensor monitoring (e.g., readings from devices in the field)
 - Notifications (e.g., storing a record of each user's notifications in a separate stream)
 
-If you are familiar with Kafka or RabbitMQ, Redis Streams are very similar to those projects but Redis Streams has some benefits which we will get into later. For now will be focusing mainly on a simple implementation of the first example of tracking user actions in our app.
+If you are familiar with Kafka or RabbitMQ, Redis Streams are very similar to those projects but Redis Streams has some nice benefits. It is much simpler to setup and use vs Kafka (no zookeeper thing) and you can easily create stateful storage for cross stream data integrity/constraints. For now though will be focusing mainly on a simple implementation of the first example of tracking user actions in our app.
 
 It is important to know that streams are append-only data structures, meaning you cannot edit a record after you have written it, however this gives streams some nice performance properties. Adding an entry to a stream is O(1), constant time. Accessing any single entry in the stream is O(n), where n is the length of the ID. When you append an entry to the stream, Redis can generate an ID for you using milliseconds epoch and an internal sequence so these IDs are generally short and fixed length. That O(n) lookup is usually just constant time because of this. These performance properties are owed by the underlying implementation's data structure, [Radix trees](https://en.wikipedia.org/wiki/Radix_tree).
 
@@ -68,7 +66,9 @@ Each account would get it's own stream, this basically partitions events in our 
 
 > An alternative would be to put [all events in one stream](#xread-block-with-one-large-stream) and use an account ID is part of the ID to keep lookups fast.
 
-Now you might be asking "great but how do we create a unique ID per account?". There are many options here. You could use UUIDs and generate them in code, you could use a distributed counter service that just gets the next integer in a sequence, or you could use another feature of Redis (sequences) which is what we will do here.
+Now you might be asking "great but how do we create a unique ID per account?". There are many options here. You could use UUIDs and generate them in code, you could use a distributed counter service that just gets the next integer in a sequence, or you could use another feature of Redis (sequences) which is what we outline here.
+
+> NOTE: In our actual implementation below, we just let connected clients specify which user they are. You will want something much more robust in a production application.
 
 Sequences in Redis are super simple because Redis handles atomic operations for us. To create a sequence, we just enter the command: `INCR <key_for_sequence>`. If that key doesn't exist yet, Redis will add it and set the value to 0 initially.
 
@@ -103,7 +103,7 @@ Don't worry if this data model is confusing right now, it will make more sense w
 
 Now that we have a plan and a path forward for how our data will be stored, let's continue with the implementation.
 
-> Note: This guide assumes you have some basic knowledge of Elixir and Redis.
+> NOTE: This guide assumes you have some basic knowledge of Elixir and Redis.
 
 ### Setup
 
@@ -529,7 +529,7 @@ end
 
 We can just pipe our generated event to the `Store.log_event` function. Don't forget to add an `alias RedisStreams.store` to the top of this module.
 
-Feel free to pause here and test sending events to Redis streams.
+Feel free to pause here and test sending events to Redis.
 
 ### Stream Consumer
 
@@ -589,7 +589,7 @@ We can define a new function to get the last event ID:
 
 ```elixir
 defp last_event_id(nil, event_id), do: event_id
-defp last_event_id(events, _), do: events |> List.last() |> Map.get(:event_id)
+defp last_event_id(events, _), do: events |> List.last() |> Map.get(:id)
 ```
 
 We are using matching here to decided which event ID to use based on whether or not we received events from our poll. If we didn't receive any we can use the event ID that was first passed in, if we did receive events, we can can the last event and grab it's ID.
@@ -605,9 +605,9 @@ def consume(event_id, account_id, owner) when is_pid(owner) do
 end
 ```
 
-We now have an infinite consume loop in a new process. The only time this loop will stop is if this process dies which happens when the socket process dies because it was spawned by the socket processes with the `link` option.
+We now have an infinite consume loop in a new process. The only time this loop will stop is if this process ends which happens when the socket process ends because it was spawned by the socket process with the `link` option.
 
-One potential problem here is that this consume loop will continuously spam the Redis server with commands right now. To avoid that, we can add in a 1 second throttle with `Process.sleep` to keep our commands per second in check:
+One problem here is that this consume loop will continuously spam the Redis server with commands right now. To avoid that, we can add in a 1 second throttle with `Process.sleep` to keep our commands per second in check:
 
 ```elixir
 defp throttle(_), do: Process.sleep(1000)
@@ -651,7 +651,7 @@ defmodule RedisStreams.Consume do
     do: events |> tap(&Process.send(pid, {:on_events, &1}, [:noconnect]))
 
   defp last_event_id(nil, event_id), do: event_id
-  defp last_event_id(events, _), do: events |> List.last() |> Map.get(:event_id)
+  defp last_event_id(events, _), do: events |> List.last() |> Map.get(:id)
 
   defp throttle(_), do: Process.sleep(1000)
 end
@@ -681,8 +681,9 @@ defp entries_to_events(nil), do: nil
 
 defp entries_to_events([[_stream, entries]]) do
   entries
-  |> Enum.map(fn [entry_id, entry] -> [{:event_id, entry_id} | list_to_keyword_list(entry)] end)
+  |> Enum.map(fn [entry_id, entry] -> [{:id, entry_id} | list_to_keyword_list(entry)] end)
   |> Enum.map(fn event -> struct(Event, event) end)
+  |> IO.inspect(label: "New Events")
 end
 
 defp list_to_keyword_list([]), do: []
@@ -699,7 +700,6 @@ Now we can add the `entries_to_events` to the end of our pipe in `read_events`:
 ```elixir
 def read_events(account_id, last_event_id) do
   ["XREAD", "STREAMS", "account:#{account_id}:log", last_event_id]
-  |> IO.inspect()
   |> send_command()
   |> entries_to_events()
 end
@@ -711,17 +711,56 @@ We have now implemented everything we need in our `RedisStreams.Store` module.
 
 Now that we have a working consumer, we should now start that consumer in our `Socket` module.
 
-Open the `socket.ex` file in the `lib` folder and find the `init` function.
+Open the `socket.ex` file in the `lib` folder and find the `init` function. Let's make a new call to our `Consume` module to subscribe to the stream:
+
+```elixir
+  def init(account_id: account_id) do
+    account_id |> IO.inspect(label: "Socket initialized for account")
+    consumer_pid = Consume.subscribe(account_id, 0)
+
+    {:ok, {account_id, consumer_pid}}
+  end
+```
+
+There is a few important changes in this function, we are now calling `Consume.subscribe` passing in account ID and the event ID to start at, which is `0` on socket start. Calling `Consume.subscribe` starts our consume loop and because we called `self()` in subscribe the socket knows the `PID` of this calling code to send messages back out.
+
+> Clients could keep track of events they have consumed and cached on their side and pass in the latest event ID in their cache.
+
+The second important change is that we can keep the `PID` of the consumer loop process in our socket genserver state to send messages to that process like `pause` or `stop`. Instead of returning `{:ok, account_id}` from `init` we can return `{:ok, {account_id, consumer_pid}}`. Now every `handle_in` or `handle_info` function can reference that `PID` if needed.
+
+Our genserver state is now a tuple so we should change our match in the `handle_in` function for generating events:
+
+```elixir
+def handle_in({"event:" <> recipient_aid, [opcode: :text]}, {aid, _} = state) do
+  %Event{
+    type: "SOME_EVENT",
+    payload: "Some payload for account(#{recipient_aid}) from account(#{aid})"
+  }
+  |> Store.log_event(recipient_aid)
+
+  {:ok, state}
+end
+```
+
+Now instead of matching on `aid`, we match on a tuple where the first element is `aid` and in this case we don't care about the consumer `PID` so we can ignore it. It helps to set the tuple to a variable called state so it can then be returned at the end: `{:ok, state}`.
+
+Now that we have our consume loop setup, run the application with `mix run --no-halt` and connect with your favorite websocket client at the url `/ws/1`. Once you are connected, try sending this message: `event:1`. You should get a new event sent back to you the next time your poll interval is hit!
+eee
+That should be it for our application! Again, if you were ever lost, you can look at the full source code [in my GitHub](https://github.com/MarcusVirg/sandbox/tree/main/concepts/redis-streams).
+
+Please run and test this with multiple websocket connections open simultaneously with the same and different accounts and try sending messages to each with the `event:{id_of_user}` syntax.
+
+I know this was a long one but thanks for hanging in there. At this point you should have a good idea on how to move forward with Redis Streams to build your next application.
 
 ## Caveats
 
 ### Redis and Memory
 
-Redis is first and foremost an in-memory store with disk-based backups. This means that using Redis in this way will keep all of your user data in-memory at all times. This is great for the lookups but can be a problem for the account log streams since they grow continuously with enough users and events you may eventually run out of memory. If your user base is capped and your events are small this is probably not going to be a problem.
+Redis is first and foremost an in-memory store with disk-based backups. This means that using Redis in this way will keep all of your user data in-memory at all times. This is great for performance but can be a problem for the account log streams since they grow continuously and with enough users and events you may eventually run out of memory. If your user base is capped and your events are small this is probably not going to be a problem.
 
 If you do think this will be an issue, it might be worth looking into a solution that builds on top of the base open-source redis to solve the issue of large event logs. [Redis on Flash](https://redis.com/redis-enterprise/technology/redis-on-flash/) might be a good option if you want Redis enterprise support anyways. Another option I would recommend is [Upstash Streams](https://upstash.com/blog/redis-streams-beyond-memory).
 
-You could also implement something yourself and instead of storing the event payload inside the stream, you could store a location to another file system or database like a MongoDB uuid or an Amazon S3 bucket.
+You could also implement something yourself and instead of storing the event payload inside the stream, you could store a location to another file system or database like a MongoDB UUID or an Amazon S3 bucket. This way all the events store in Redis are really small and can fit in memory, while pointing to the larger payloads living in some persistent storage.
 
 It is also important to know there may be some potential data loss using base open-source Redis, because even with disk-backed caching, it does not happen atomically so if the Redis instance crashes, data from after the last backup may be lost. The services that I have listed above have solved this issue for some of the Redis data types, like Streams.
 
@@ -749,7 +788,7 @@ We could change our data model a bit and instead use a single stream for all acc
 
 A user won't always be connected to the application via websocket. So let's say our user, Han Solo, is currently offline and 3 events entered the stream for that specific user because another user, Princess Leia, interacted with them while they were offline. Now Leia is still online and is currently calling `XREAD` with a certain offset of messages that they themselves have read. Immediately Leia will skip over those 3 messages for Han because they aren't not for her. Finally Han comes online and needs to see messages but the `XREAD` command for the current Redis connection has already gone past those messages for Han.
 
-One solution would be that Han could send a new `XREAD` command with his own offset but now we are right back to [this problem](#xread-block-with-a-stream-per-account).
+One solution would be that Han could send a new `XREAD` command with his own offset but then we would be right back to [this problem](#xread-block-with-a-stream-per-account).
 
 Redis has a feature called [consumer groups](https://redis.io/docs/data-types/streams/#consumer-groups) that could solve this problem since each group has it's own offset in the stream: `XREADGROUP GROUP sockets account:1 STREAMS account:log 0`. You still need to define each consumer and their offset in the command anyways so we are back to [this problem](#xread-block-many-streams-at-once). We might as well go back to a stream per account since it will keep our reads faster with natural, per account, log partitioning.
 
@@ -761,6 +800,6 @@ Adjusting the polling interval might also be tricky. Because with our polling me
 
 #### Combination
 
-If polling is still unacceptable for your application, you could use a combination of the methods above and have one large stream just to keep track of how many events each user has. So when a new event comes in, you can `XADD` to both the account specific stream and the large, cross-account, stream just recording the account ID. This would allow you to create an in-memory lookup that could notify the socket processes that there are new events to read. This way you only need one process polling the large stream in Redis and the other processes just wait for the polling processes to tell them there is something new to call `XREAD`. This solution is much more complicated than just the simple polling method but it would reduce your commands per second substantially.
+If polling is still unacceptable for your application, you could use a combination of the methods above and have one large stream just to keep track of how many events each user has. So when a new event comes in, you can `XADD` to both the account specific stream and the large, cross-account, stream just recording the account ID. This would allow you to create an in-memory lookup that could notify the socket processes that there are new events to read. This way you only need one process polling the large stream in Redis and the other processes just wait for the polling processes to tell them there is something new to call `XREAD`. This solution is much more complicated than just the simple polling method but it would reduce your commands per second substantially. I may discuss this solution in a future blog post!
 
 > If anyone knows of a better solution or would just like to chat about these tradeoffs, please feel free to [email me](/about).
