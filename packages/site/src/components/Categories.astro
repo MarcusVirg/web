@@ -6,12 +6,12 @@ type Props = {
 const { categories } = Astro.props
 ---
 
-<ol class="flex space-x-2">
+<ol class="flex flex-wrap">
 	{
 		categories.map((category) => (
-			<li class="bg-gradient-to-br from-brand-blue via-indigo-500 to-brand-violet rounded-full p-0.5">
+			<li class="bg-gradient-to-br from-brand-blue via-indigo-500 to-brand-violet rounded-full p-0.5 m-1">
 				<div class="bg-zinc-900 px-3 py-1 rounded-full">
-					<span class="font-semibold text-transparent bg-clip-text bg-gradient-to-br from-brand-blue to-brand-violet">
+					<span class="font-semibold text-transparent bg-clip-text bg-gradient-to-br from-brand-blue to-brand-violet whitespace-nowrap">
 						{category}
 					</span>
 				</div>

@@ -1,5 +1,6 @@
 ---
 import { CollectionEntry, getCollection } from 'astro:content'
+import { onlyFinalPosts } from '../../content/config'
 import Layout from '../../layouts/Layout.astro'
 import Categories from '../../components/Categories.astro'
 import Markdown from '../../components/Markdown.astro'
@@ -7,8 +8,8 @@ import IconContainer from '../../components/IconContainer.astro'
 import CommentList from '../../components/comments/CommentList.svelte'
 
 export async function getStaticPaths() {
-	const blogEntries = await getCollection('blog')
-	return blogEntries.map((post) => ({
+	const blogCollection = await getCollection('blog', onlyFinalPosts)
+	return blogCollection.map((post) => ({
 		params: { slug: post.slug },
 		props: { post }
 	}))
@@ -32,7 +33,7 @@ const {
 				<a class="group cursor-pointer flex items-center space-x-4" href="/blog">
 					<IconContainer iconName="chevron-back" />
 					<span class="text-lg text-zinc-500 group-hover:text-zinc-400 transition">
-						Go Back
+						Back to Blog Posts
 					</span>
 				</a>
 			</div>

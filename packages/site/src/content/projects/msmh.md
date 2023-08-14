@@ -57,6 +57,6 @@ I learned a ton about building software with web technologies getting into topic
 - Data visualization and dashboards
 - And much more...
 
-I think this project taught me a lot more about practical software engineering than my computer science degree did. Doing a project like this alongside traditional compsci education curriculums and internships should be a requirement in my opinion. I think having this opportunity and seeing it through to completion put me ahead of my peers in someway. I believe I was able to contribute faster when entering the actual workforce. I am grateful I was given the opportunity to do this project on top of my studies.
+I think this project taught me a lot more about practical software engineering than my computer science degree did. Doing a project like this alongside traditional compsci education curriculums and internships should be a requirement in my opinion. I think having this opportunity and seeing it through to completion put me ahead of many of my peers coming out of college. I believe I was able to contribute faster when entering the actual workforce. I am grateful I was given the opportunity to do this project on top of my studies.
 
 As of today, the project requires very little maintenance but is being used by researchers all over the world. The app has support for around 10 languages currently. The research project is still on-going but currently seeking funding for a larger development team to keep adding features.

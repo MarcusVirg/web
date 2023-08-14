@@ -1,11 +1,10 @@
 ---
 import { getCollection } from 'astro:content'
+import { onlyFinalPosts } from '../../content/config'
 import Layout from '../../layouts/Layout.astro'
 import ArticleTimeline from '../../components/ArticleTimeline.svelte'
 
-const blogCollection = await getCollection('blog', ({ data: post }) =>
-	import.meta.env.PROD ? !post.isDraft : true
-)
+const blogCollection = await getCollection('blog', onlyFinalPosts)
 ---
 
 <Layout title="Blog">
