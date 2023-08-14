@@ -53,6 +53,8 @@ export const socialsData: Social[] = [
 	}
 ]
 
+export const resumeLink = 'https://drive.google.com/file/d/1iiUyz2p4GFHv5AlyY88BhFLQIZeAgsDJ/view?usp=sharing'
+
 type UsesItem = {
 	title: string
 	description: string
