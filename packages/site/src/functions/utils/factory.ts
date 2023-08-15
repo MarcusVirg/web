@@ -1,12 +1,10 @@
 import { z } from 'zod'
 import type { HandlerEvent, HandlerContext } from '@netlify/functions'
 import { Ratelimit } from '@upstash/ratelimit'
-import store from '../utils/store'
+import redis from './store'
 import AppError from './error'
 
 const rateLimitCache = new Map<string, number>()
-const redis = store.connect()
-
 const headers = {
 	'Access-Control-Allow-Origin': '*',
 	'Access-Control-Allow-Headers': 'Content-Type',
