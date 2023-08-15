@@ -1,6 +1,8 @@
 import { Redis } from '@upstash/redis'
 import config from './config'
 
+console.log(config)
+
 const store = {
 	connect: () =>
 		new Redis({

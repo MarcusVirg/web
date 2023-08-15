@@ -6,6 +6,4 @@ const ConfigSchema = z.object({
 	REDIS_TOKEN: z.string()
 })
 
-console.log(process.env.REDIS_ENDPOINT)
-
 export default ConfigSchema.parse(process.env)
