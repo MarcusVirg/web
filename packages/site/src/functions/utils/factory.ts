@@ -28,8 +28,22 @@ function functionFactory<F extends Function>(runFunc: F, opts: FactoryOptions = 
 			}
 		}
 
+		console.log('inside factory!')
+
 		try {
 			const redis = store.connect()
+
+			// Check feature flag
+			if (opts.featureFlag) {
+				const featureFlag = await redis.hget<boolean>('flags', opts.featureFlag)
+				if (!featureFlag) {
+					return {
+						statusCode: 403,
+						headers,
+						body: 'This feature is not available right now.'
+					}
+				}
+			}
 
 			// Rate limit
 			if (opts.rateLimit) {
@@ -51,18 +65,6 @@ function functionFactory<F extends Function>(runFunc: F, opts: FactoryOptions = 
 						headers,
 						body: 'Too many requests, please try again later.'
 					}
-			}
-
-			// Check feature flag
-			if (opts.featureFlag) {
-				const featureFlag = await redis.hget<boolean>('flags', opts.featureFlag)
-				if (!featureFlag) {
-					return {
-						statusCode: 403,
-						headers,
-						body: 'This feature is not available right now.'
-					}
-				}
 			}
 
 			const data = await runFunc(e, redis)
