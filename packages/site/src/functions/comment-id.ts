@@ -3,25 +3,51 @@ import type {
 	HandlerContext,
 	HandlerResponse
 } from '@netlify/functions'
-import { Redis } from '@upstash/redis'
+// import { Redis } from '@upstash/redis'
 
 async function run(
 	_e: HandlerEvent,
 	_ctx: HandlerContext
 ): Promise<HandlerResponse> {
-	console.log('making test call to redis with token:', process.env.REDIS_TOKEN)
+	try {
+		console.log(
+			'making test call to redis with fetch and with token:',
+			process.env.REDIS_TOKEN
+		)
 
-	const redis = new Redis({
-		url: process.env.REDIS_ENDPOINT as string,
-		token: process.env.REDIS_TOKEN as string
-	})
-	const commentId = await redis.get<number>('commentId')
+		const res = await fetch(
+			`${process.env.REDIS_ENDPOINT as string}/get/commentId/bar`,
+			{
+				headers: {
+					Authorization: `Bearer ${process.env.REDIS_TOKEN}`
+				}
+			}
+		)
 
-	console.log('commentId:', commentId)
+		if (!res.ok) {
+			throw res
+		}
 
-	return {
-		statusCode: 200,
-		body: JSON.stringify({ commentId })
+		const data = await res.json()
+
+		// const redis = new Redis({
+		// 	url: process.env.REDIS_ENDPOINT as string,
+		// 	token: process.env.REDIS_TOKEN as string
+		// })
+		// const commentId = await redis.get<number>('commentId')
+
+		console.log('commentId:', data)
+
+		return {
+			statusCode: 200,
+			body: JSON.stringify({ data })
+		}
+	} catch (err) {
+		console.error(err)
+		return {
+			statusCode: 500,
+			body: JSON.stringify({ error: 'Something went wrong' })
+		}
 	}
 }
 
