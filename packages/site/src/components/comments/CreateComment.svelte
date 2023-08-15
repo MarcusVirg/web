@@ -14,7 +14,7 @@
 	let error: string | null = null
 
 	async function addComment() {
-		const res = await fetch('http://localhost:4000/.netlify/functions/add-comment', {
+		const res = await fetch('/.netlify/functions/add-comment', {
 			method: 'POST',
 			body: JSON.stringify(comment)
 		})

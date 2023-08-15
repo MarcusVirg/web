@@ -10,9 +10,7 @@
 	onMount(() => (comments = fetchComments(blogId)))
 
 	async function fetchComments(blogId: string): Promise<Comment[]> {
-		const res = await fetch(
-			`http://localhost:4000/.netlify/functions/get-comments?blogId=${blogId}`
-		)
+		const res = await fetch(`/.netlify/functions/get-comments?blogId=${blogId}`)
 
 		if (!res.ok) {
 			let error
