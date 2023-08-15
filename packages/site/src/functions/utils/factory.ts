@@ -5,6 +5,7 @@ import store from '../utils/store'
 import AppError from './error'
 
 const rateLimitCache = new Map<string, number>()
+const redis = store.connect()
 
 const headers = {
 	'Access-Control-Allow-Origin': '*',
@@ -28,9 +29,11 @@ function functionFactory<F extends Function>(runFunc: F, opts: FactoryOptions = 
 			}
 		}
 
-		try {
-			const redis = store.connect()
+		console.log('Doing test call to redis')
+		console.log(await redis.hget<boolean>('flags', 'add-comment'))
+		console.log('Test call done')
 
+		try {
 			// Check feature flag
 			if (opts.featureFlag) {
 				const featureFlag = await redis.hget<boolean>('flags', opts.featureFlag)
