@@ -1,55 +1,40 @@
-import type { HandlerEvent, HandlerContext } from '@netlify/functions'
+import type { HandlerEvent } from '@netlify/functions'
 import factory from './utils/factory'
-import storage from './utils/store'
+import type { Store } from './utils/store'
 import { GetComments } from './utils/commands'
-import { type Event, EventType } from './utils/events'
-import type { CommentAggregate } from './utils/aggregates'
+import { type Event, type CommentAggregate, EventType } from './utils/events'
 
-async function run(
-	e: HandlerEvent,
-	_ctx: HandlerContext
-): Promise<CommentAggregate[]> {
-	const store = storage.connect()
-
+async function run(e: HandlerEvent, redis: Store): Promise<CommentAggregate[]> {
 	const command = GetComments.parse(e.queryStringParameters)
 
-	const commentEvents = await store.lrange<Event>(
+	const commentEvents = await redis.lrange<Event>(
 		`blog:${command.blogId}:comments`,
 		0,
 		-1
 	)
 
 	const commentAggregates = commentEvents.reduce(
-		(acc: Record<number, CommentAggregate>, event: Event) => {
+		(acc: Map<number, CommentAggregate>, event: Event) => {
 			switch (event.type) {
 				case EventType.COMMENT_CREATED:
-					acc[event.payload.commentId] = {
+					acc.set(event.payload.commentId, {
 						blogId: event.payload.blogId,
 						commentId: event.payload.commentId,
 						author: event.payload.author,
 						comment: event.payload.comment,
-						isEdited: false,
-						timestamp: event.payload.created_at
-					}
+						timestamp: event.payload.createdAt
+					})
 					break
-				case EventType.COMMENT_EDITED:
-					acc[event.payload.commentId] = {
-						...acc[event.payload.commentId],
-						comment: event.payload.comment,
-						isEdited: true,
-						timestamp: event.payload.edited_at
-					}
+				case EventType.COMMENT_DELETED:
+					acc.delete(event.payload.commentId)
 					break
 			}
 			return acc
 		},
-		{}
+		new Map()
 	)
 
-	console.log(commentAggregates)
-
-	return Object.values(commentAggregates)
+	return [...commentAggregates.values()]
 }
 
-const errorMessage = 'Cannot fetch comments at this time, please try again later.'
-export const handler = factory(run, errorMessage)
+export const handler = factory(run)

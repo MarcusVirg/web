@@ -1,10 +1,13 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte'
 	import CommentForm from './CommentForm.svelte'
+
+	const dispatch = createEventDispatcher()
 
 	export let blogId: string
 	const INITIAL_COMMENT = {
 		blogId,
-		author: '',
+		author: localStorage.getItem('author') || '',
 		comment: ''
 	}
 	let comment = INITIAL_COMMENT
@@ -16,18 +19,25 @@
 			body: JSON.stringify(comment)
 		})
 		if (!res.ok) {
-			error = res.statusText
+			try {
+				error = await res.text()
+			} catch (err) {
+				error = res.statusText
+			}
+
 			return
 		}
 
+		dispatch('newComment', await res.json())
+
+		localStorage.setItem('author', comment.author)
 		comment = INITIAL_COMMENT
-		return await res.json()
 	}
 </script>
 
 <div>
 	<CommentForm bind:comment on:submit={addComment} />
 	{#if error}
-		<p class="text-red-600 text-sm font-semibold">{error}</p>
+		<p class="text-red-400 text-sm font-semibold mt-2">{error}</p>
 	{/if}
 </div>
