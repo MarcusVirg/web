@@ -28,8 +28,6 @@ function functionFactory<F extends Function>(runFunc: F, opts: FactoryOptions = 
 			}
 		}
 
-		console.log('inside factory!')
-
 		try {
 			const redis = store.connect()
 
