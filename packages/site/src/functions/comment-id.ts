@@ -3,6 +3,7 @@ import type {
 	HandlerContext,
 	HandlerResponse
 } from '@netlify/functions'
+import fetch from 'node-fetch'
 // import { Redis } from '@upstash/redis'
 
 async function run(
