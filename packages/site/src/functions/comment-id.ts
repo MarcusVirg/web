@@ -26,7 +26,7 @@ async function run(
 		)
 
 		if (!res.ok) {
-			throw res
+			console.error(res.statusText)
 		}
 
 		const data = await res.json()
