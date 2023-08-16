@@ -27,10 +27,6 @@ function functionFactory<F extends Function>(runFunc: F, opts: FactoryOptions = 
 			}
 		}
 
-		console.log('Doing test call to redis')
-		console.log(await redis.hget<boolean>('flags', 'add-comment'))
-		console.log('Test call done')
-
 		try {
 			// Check feature flag
 			if (opts.featureFlag) {

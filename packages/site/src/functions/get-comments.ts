@@ -6,15 +6,12 @@ import { type Event, type CommentAggregate, EventType } from './utils/events'
 
 async function run(e: HandlerEvent, redis: Store): Promise<CommentAggregate[]> {
 	const command = GetComments.parse(e.queryStringParameters)
-	console.log(command)
 
 	const commentEvents = await redis.lrange<Event>(
 		`blog:${command.blogId}:comments`,
 		0,
 		-1
 	)
-
-	console.log(commentEvents)
 
 	const commentAggregates = commentEvents.reduce(
 		(acc: Map<number, CommentAggregate>, event: Event) => {
