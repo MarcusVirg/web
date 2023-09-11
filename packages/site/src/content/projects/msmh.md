@@ -18,11 +18,11 @@ I joined the research project about 3/4 of the way through my Computer Science e
 
 This is the main assessment flow of the first design I did:
 
-![MSMH Assessment Design Desktop 1](/blog-assets/msmh-assessment-desktop-1.png)
+![MSMH Assessment Design Desktop 1](./images/msmh-assessment-desktop-1.png)
 
 I also made a design for the mobile format:
 
-![MSMH Assessment Design Mobile 1](/blog-assets/msmh-assessment-mobile-1.png)
+![MSMH Assessment Design Mobile 1](./images/msmh-assessment-mobile-1.png)
 
 I went back to the heads of the research project and we iterated on these designs a bit until we decided they were solid enough to start building the actual software. I communicated a general plan and timelines to them in a work plan document. Keep in mind, I would consider this my first real software project so naturally my timelines were way off as estimating software is and continues to be one of the hardest things to do for me.
 
@@ -37,13 +37,13 @@ If I remember correctly, I built the first version of this system in about 4-6 m
 
 The latest version of the assessment application looks something like this:
 
-![MSMH Assessment Design Desktop 2](/blog-assets/msmh-assessment-desktop-2.png)
+![MSMH Assessment Design Desktop 2](./images/msmh-assessment-desktop-2.png)
 
-![MSMH Assessment Design Mobile 2](/blog-assets/msmh-assessment-mobile-2.png)
+![MSMH Assessment Design Mobile 2](./images/msmh-assessment-mobile-2.png)
 
 Here is a screenshot from the researcher dashboard:
 
-![MSMH Researcher Dashboard](/blog-assets/msmh-vendor-dashboard.png)
+![MSMH Researcher Dashboard](./images/msmh-vendor-dashboard.png)
 
 I learned a ton about building software with web technologies getting into topics like:
 

@@ -1,4 +1,4 @@
-import { defineCollection, CollectionEntry } from 'astro:content'
+import { defineCollection, type CollectionEntry } from 'astro:content'
 import { blogSchema, experienceSchema, projectSchema } from './_schemas'
 
 const blog = defineCollection({

@@ -39,13 +39,13 @@ Here is a [link to some other website](https://www.resplice.com).
 
 What does a photo look like?
 
-![Hi Estudio Render](/blog-assets/test-img-1.jpg)
+![Hi Estudio Render](./images/test-img-1.jpg)
 
 Same photo with caption:
 
 <figure>
   <img
-    src="/blog-assets/test-img-1.jpg"
+    src="./images/test-img-1.jpg"
     alt="Hi Estudio Render"
   >
   <figcaption>
