@@ -1,7 +1,7 @@
 ---
 title: 'Resplice'
 description: 'Stop managing contacts, let contacts manage themselves.'
-logo: 'resplice-logo'
+logo: './images/resplice-logo.png'
 website: 'https://www.resplice.com'
 categories: [Elixir, Svelte, PWA]
 sortOrder: 1

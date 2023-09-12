@@ -40,15 +40,3 @@ Here is a [link to some other website](https://www.resplice.com).
 What does a photo look like?
 
 ![Hi Estudio Render](./images/test-img-1.jpg)
-
-Same photo with caption:
-
-<figure>
-  <img
-    src="./images/test-img-1.jpg"
-    alt="Hi Estudio Render"
-  >
-  <figcaption>
-    Photo by <a href="https://unsplash.com/es/@hiestudio?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">HI! ESTUDIO</a> on <a href="https://unsplash.com/photos/Yv9S5LhfobA?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-  </figcaption>
-</figure>

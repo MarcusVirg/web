@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content'
 import { Image } from 'astro:assets'
 import Layout from '../../layouts/Layout.astro'
+import placeholderLogo from '../images/placeholder-logo.png'
 
 const projectCollection = await getCollection('projects', ({ data: project }) =>
 	import.meta.env.PROD ? !project.isDraft : true
@@ -17,56 +18,50 @@ const projectCollection = await getCollection('projects', ({ data: project }) =>
 		{
 			projectCollection
 				.sort((a, b) => a.data.sortOrder - b.data.sortOrder)
-				.map((project) => {
-					const logo = project.data.logo
-						? import(`../../images/${project.data.logo}.png`)
-						: import('../../images/placeholder-logo.png')
-
-					return (
-						<a
-							class="bg-zinc-800/50 px-8 py-6 rounded-lg flex items-center space-x-4 hover:shadow-lg hover:bg-zinc-800 transition"
-							href={`/projects/${project.slug}`}
-						>
-							<div class="flex-none relative h-10 w-10 flex items-center overflow-hidden justify-center rounded-full bg-zinc-800 shadow-md shadow-zinc-800/5 border border-zinc-700/50">
-								<Image
-									src={logo}
-									alt={`Logo for ${project.data.title}`}
-									width={28}
-									height={28}
-									format="webp"
-									class="h-7 w-7 text-transparent"
-								/>
-							</div>
-							<div class="flex-1">
-								<h2 class="font-semibold tracking-wider text-zinc-100">
-									{project.data.title}
-								</h2>
-								<p>{project.data.description}</p>
-								<div
-									aria-hidden="true"
-									class="relative mt-2 flex items-center space-x-1 text-sm text-brand-blue font-semibold"
+				.map((project) => (
+					<a
+						class="bg-zinc-800/50 px-8 py-6 rounded-lg flex items-center space-x-4 hover:shadow-lg hover:bg-zinc-800 transition"
+						href={`/projects/${project.slug}`}
+					>
+						<div class="flex-none relative h-10 w-10 flex items-center overflow-hidden justify-center rounded-full bg-zinc-800 shadow-md shadow-zinc-800/5 border border-zinc-700/50">
+							<Image
+								src={project.data.logo || placeholderLogo}
+								alt={`Logo for ${project.data.title}`}
+								width={28}
+								height={28}
+								format="webp"
+								class="h-7 w-7 object-cover text-transparent"
+							/>
+						</div>
+						<div class="flex-1">
+							<h2 class="font-semibold tracking-wider text-zinc-100">
+								{project.data.title}
+							</h2>
+							<p>{project.data.description}</p>
+							<div
+								aria-hidden="true"
+								class="relative mt-2 flex items-center space-x-1 text-sm text-brand-blue font-semibold"
+							>
+								<span>See more</span>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="ionicon h-4 w-4"
+									viewBox="0 0 512 512"
 								>
-									<span>See more</span>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="ionicon h-4 w-4"
-										viewBox="0 0 512 512"
-									>
-										<title>Chevron Forward</title>
-										<path
-											fill="currentColor"
-											stroke="currentColor"
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="48"
-											d="M184 112l144 144-144 144"
-										/>
-									</svg>
-								</div>
+									<title>Chevron Forward</title>
+									<path
+										fill="currentColor"
+										stroke="currentColor"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="48"
+										d="M184 112l144 144-144 144"
+									/>
+								</svg>
 							</div>
-						</a>
-					)
-				})
+						</div>
+					</a>
+				))
 		}
 	</section>
 </Layout>
