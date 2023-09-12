@@ -5,7 +5,7 @@ import Layout from '../../layouts/Layout.astro'
 import Markdown from '../../components/Markdown.astro'
 import Categories from '../../components/Categories.astro'
 import IconContainer from '../../components/IconContainer.astro'
-import placeholderLogo from '../images/placeholder-logo.png'
+import placeholderLogo from '../../images/placeholder-logo.png'
 
 export async function getStaticPaths() {
 	const projectEntries = await getCollection('projects')

@@ -2,7 +2,7 @@ import rss from '@astrojs/rss'
 import { getCollection } from 'astro:content'
 import { onlyFinalPosts } from '../content/config'
 
-export async function get() {
+export async function GET() {
 	const blogCollection = await getCollection('blog', onlyFinalPosts)
 	return rss({
 		title: 'Marcus Virginia | Blog',

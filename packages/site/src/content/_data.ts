@@ -50,6 +50,11 @@ export const socialsData: Social[] = [
 		name: 'linkedin',
 		icon: 'logo-linkedin',
 		url: 'https://www.linkedin.com/in/marcusvirginia/'
+	},
+	{
+		name: 'rss',
+		icon: 'logo-rss',
+		url: '/rss.xml'
 	}
 ]
 
