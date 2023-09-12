@@ -33,7 +33,7 @@ It is important to know that streams are append-only data structures, meaning yo
 Each entry in a stream consists of field value pairs similar to a dictionary or a different Redis data structure, `Hashes`. These field value pairs are space separated in the commands like so:
 
 ```sh
-XADD account:1:log * name Han Solo age 35
+XADD account:1:log * name "Han Solo" age 35
 ```
 
 This command adds an entry `name: Han Solo, age: 35` to the stream `account:1:log`. The `*` in this command tells the Redis server to auto generate the ID. You can pass a value here to set an ID explicitly.
@@ -318,7 +318,7 @@ At this point, you should have enough code to be able to compile, run, and test 
 
 You can run `mix run --no-halt` to compile and run your application. If your application started successfully you should see something like this:
 
-![Running RedisStreams.Http with Bandit 1.0.0-pre.10 at 0.0.0.0:4000](/blog-assets/redis-streams-1.png)
+![Running RedisStreams.Http with Bandit 1.0.0-pre.10 at 0.0.0.0:4000](./images/redis-streams-1.png)
 
 Connect to the app with your favorite websocket client by making a GET request to `/ws/1`. I was personally using Postman for this.
 
@@ -440,7 +440,7 @@ end
 We now need to send a command to Redix. Redix is pretty low-level and takes [any Redis command](https://redis.io/commands/) as a list of strings like this:
 
 ```elixir
-["XADD", "account:1:log", "*", "type", "SOME_EVENT", "paylod", "SOME_PAYLOAD"]
+["XADD", "account:1:log", "*", "type", "SOME_EVENT", "payload", "SOME_PAYLOAD"]
 ```
 
 We know we will need to turn our `Event` struct into a list of key values so that is a good first step and we can do this fairly easily in a new function:

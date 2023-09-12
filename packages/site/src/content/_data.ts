@@ -50,10 +50,16 @@ export const socialsData: Social[] = [
 		name: 'linkedin',
 		icon: 'logo-linkedin',
 		url: 'https://www.linkedin.com/in/marcusvirginia/'
+	},
+	{
+		name: 'rss',
+		icon: 'logo-rss',
+		url: '/rss.xml'
 	}
 ]
 
-export const resumeLink = 'https://drive.google.com/file/d/1iiUyz2p4GFHv5AlyY88BhFLQIZeAgsDJ/view?usp=sharing'
+export const resumeLink =
+	'https://drive.google.com/file/d/1iiUyz2p4GFHv5AlyY88BhFLQIZeAgsDJ/view?usp=sharing'
 
 type UsesItem = {
 	title: string

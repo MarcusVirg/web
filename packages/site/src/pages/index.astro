@@ -1,5 +1,5 @@
 ---
-import { Image } from '@astrojs/image/components'
+import { Image } from 'astro:assets'
 import Socials from '../components/Socials.astro'
 import Layout from '../layouts/Layout.astro'
 import portfolioImage from '../images/portfolio.jpg'
@@ -16,7 +16,7 @@ import ProjectsPreview from '../components/ProjectsPreview.astro'
 			width={64}
 			height={64}
 			format="webp"
-			class="rounded-full ring ring-offset-4 ring-offset-zinc-900 ring-brand-blue"
+			class="rounded-full ring ring-offset-4 ring-offset-zinc-900 ring-brand-blue w-16 h-16 object-cover"
 		/>
 		<h1 class="max-w-2xl text-4xl font-semibold text-slate-100 tracking-wide my-8">
 			Software engineer, amateur designer, and frequent flyer.

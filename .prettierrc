@@ -6,5 +6,5 @@
 	"trailingComma": "none",
 	"printWidth": 85,
 	"svelteSortOrder": "scripts-markup-styles-options",
-	"plugins": ["prettier-plugin-svelte"]
+	"plugins": ["prettier-plugin-astro", "prettier-plugin-svelte"]
 }

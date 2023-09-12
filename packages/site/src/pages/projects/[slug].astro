@@ -1,10 +1,11 @@
 ---
-import { CollectionEntry, getCollection } from 'astro:content'
-import { Image } from '@astrojs/image/components'
+import { type CollectionEntry, getCollection } from 'astro:content'
+import { Image } from 'astro:assets'
 import Layout from '../../layouts/Layout.astro'
 import Markdown from '../../components/Markdown.astro'
 import Categories from '../../components/Categories.astro'
 import IconContainer from '../../components/IconContainer.astro'
+import placeholderLogo from '../../images/placeholder-logo.png'
 
 export async function getStaticPaths() {
 	const projectEntries = await getCollection('projects')
@@ -20,10 +21,6 @@ type Props = {
 
 const { project } = Astro.props
 const { Content } = await project.render()
-
-const logo = project.data.logo
-	? import(`../../images/${project.data.logo}.png`)
-	: import('../../images/placeholder-logo.png')
 ---
 
 <Layout title={project.data.title}>
@@ -43,12 +40,12 @@ const logo = project.data.logo
 					class="relative h-11 w-11 flex items-center overflow-hidden justify-center rounded-full bg-zinc-800 shadow-md shadow-zinc-800/5 border border-zinc-700/50"
 				>
 					<Image
-						src={logo}
+						src={project.data.logo || placeholderLogo}
 						alt={`Logo for ${project.data.title}`}
 						width={28}
 						height={28}
 						format="webp"
-						class="h-8 w-8 text-transparent"
+						class="h-8 w-8 object-cover text-transparent"
 					/>
 				</div>
 				{
