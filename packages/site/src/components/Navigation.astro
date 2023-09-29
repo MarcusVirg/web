@@ -16,7 +16,9 @@ import { navigationItems } from '../content/_data'
 						'relative transition hover:text-brand-blue font-semibold tracking-wide py-3',
 						{
 							'text-transparent bg-clip-text bg-gradient-to-br from-brand-blue to-brand-violet':
-								Astro.url.pathname === item.href
+								item.href === '/'
+									? Astro.url.pathname === '/'
+									: Astro.url.pathname.includes(item.href)
 						}
 					]}
 				>
@@ -24,9 +26,14 @@ import { navigationItems } from '../content/_data'
 					<div
 						class:list={[
 							{
-								hidden: Astro.url.pathname !== item.href,
+								hidden:
+									item.href === '/'
+										? Astro.url.pathname !== '/'
+										: !Astro.url.pathname.includes(item.href),
 								'absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-brand-blue to-brand-violet rounded-full':
-									Astro.url.pathname === item.href
+									item.href === '/'
+										? Astro.url.pathname === '/'
+										: Astro.url.pathname.includes(item.href)
 							}
 						]}
 					/>

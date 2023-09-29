@@ -9,19 +9,19 @@ export const navigationItems: NavigationItem[] = [
 	},
 	{
 		name: 'About',
-		href: '/about/'
+		href: '/about'
 	},
 	{
 		name: 'Blog',
-		href: '/blog/'
+		href: '/blog'
 	},
 	{
 		name: 'Projects',
-		href: '/projects/'
+		href: '/projects'
 	},
 	{
 		name: 'Uses',
-		href: '/uses/'
+		href: '/uses'
 	}
 ]
 
@@ -37,11 +37,6 @@ export const socialsData: Social[] = [
 		url: 'https://mastodon.social/@marcusvirginia'
 	},
 	{
-		name: 'instagram',
-		icon: 'logo-instagram',
-		url: 'https://www.instagram.com/marcusjvirginia/'
-	},
-	{
 		name: 'github',
 		icon: 'logo-github',
 		url: 'https://github.com/MarcusVirg'
@@ -50,6 +45,11 @@ export const socialsData: Social[] = [
 		name: 'linkedin',
 		icon: 'logo-linkedin',
 		url: 'https://www.linkedin.com/in/marcusvirginia/'
+	},
+	{
+		name: 'instagram',
+		icon: 'logo-instagram',
+		url: 'https://www.instagram.com/marcusjvirginia/'
 	},
 	{
 		name: 'rss',
