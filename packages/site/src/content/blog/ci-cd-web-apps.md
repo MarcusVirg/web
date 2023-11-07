@@ -40,6 +40,8 @@ Now that we have a better idea of what some of these terms mean, let's go throug
 
 This guide will use an example front-end application and show you how to create a CI/CD process that deploys to [Vercel](https://vercel.com/home).
 
+> Note: I am assuming you already have node installed and a development environment setup. If that isn't the case, please take time to do that now.
+
 ### Tools
 
 There are many CI/CD tools out there that provide a platform to help integrate and deploy code changes. Some examples include:
@@ -55,3 +57,165 @@ There are many CI/CD tools out there that provide a platform to help integrate a
 They all have their pros and cons but I personally just go with GitHub actions and recommend you do the same. You are likely already using GitHub and they have a **very** generous free tier. The integration is better with your existing codebase and the community is already large so there is a ton of resources out there to learn about how it works. If you are using GitLab, I would recommend going with the GitLab CI/CD naturally.
 
 If you work at a company, especially a large corporation, you likely have already had this decided for you. This guide should still be useful to you either way. You will either learn more about how your existing CI/CD works or will be able to take this GitHub actions example and duplicate the functionality in your tool of choice.
+
+You will also need some tools adjacent to your CI/CD platform so you can actually build, test, and deploy your software. Your CI/CD won't do this for you, it simply runs tools to do all those things in an automated fashion.
+
+Here are some examples of modern web build tools:
+
+- [Webpack](https://webpack.js.org/)
+- [Vite](https://vitejs.dev/)
+- [Rollup](https://rollupjs.org/)
+- [ESBuild](https://esbuild.github.io/)
+- [Turborepo](https://turbo.build/)
+- [Grunt](https://gruntjs.com/)
+- [Parcel](https://parceljs.org/)
+
+Here are some examples of modern web testing tools:
+
+- [Jest](https://jestjs.io/)
+- [Vitest](https://vitest.dev/)
+- [Playwright](https://playwright.dev/)
+
+Finally, here are some examples of modern web linting tools:
+
+- [ESLint](https://eslint.org/)
+- [TypeScript](https://www.typescriptlang.org/) (Typed JS, more than just a linter)
+- [Prettier](https://prettier.io/) (Code Formatting)
+
+In this guide, we will be using the following tools:
+
+- Vite & Rollup for production bundling
+- Vitest for testing
+- ESLint & Prettier
+- TypeScript
+
+These tools will cover the building and testing of our application but what about deployment? We need some kind of system or platform that will take our final production bundle and serve those static files, or if we are using a server rendered application, a system that runs a node server. That system should also handle DNS for us and point a url at our application (ideally with SSL already setup). This is where Vercel comes in. They are a great platform for deploying static sites and SSR web applications. We will be using their CLI tool combined with GitHub Actions to deploy the application in the CD step.
+
+### Setup
+
+Let's quickly setup a React single page application using Vite so we have some project to test our CI/CD with.
+
+> If you already have an existing project, please skip this step and go to [CI](#ci).
+
+#### Vite CLI
+
+Run:
+
+```sh
+npm create vite@latest
+```
+
+Enter a project name, select `React` as the framework, select `TypeScript` as the variant, and then hit enter to create the project. Following the instructions the CLI gives you and `cd` into your project folder and run `npm install`. This will install the dependencies you need to run a basic React app. Using the `Vite` CLI, we get some things for free. ESLint & TypeScript has already been installed and configured for us. To finish setup, we will just need to install and configure `Prettier` & `Vitest`.
+
+#### Prettier
+
+To setup Prettier, run:
+
+```sh
+npm install --save-dev prettier eslint-config-prettier
+```
+
+Add the prettier plugin to the eslint `extends` config that vite created for us in the `.eslintrc.cjs` file:
+
+```js
+extends: [
+  'eslint:recommended',
+  'plugin:@typescript-eslint/recommended',
+  'plugin:react-hooks/recommended',
+  'prettier'
+],
+```
+
+Its also worth adding a `.prettierrc` to configure prettier to your liking here is an example:
+
+```json
+{
+	"useTabs": true,
+	"tabWidth": 2,
+	"semi": false,
+	"singleQuote": true,
+	"trailingComma": "none",
+	"printWidth": 100
+}
+```
+
+Finally, change the `lint` command in `package.json` to `eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 && prettier --check src`.
+
+This will run eslint and prettier in the CI later on.
+
+> Make sure to run this command locally now and fix any errors otherwise it will break CI later on.
+
+#### Vitest
+
+To install `vitest` run:
+
+```sh
+npm install --save-dev vitest jsdom @testing-library/react @testing-library/jest-dom
+```
+
+Change your existing `vite.config.ts` file to be:
+
+```ts
+/// <reference types="vitest" />
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+	plugins: [react()],
+	test: {
+		environment: 'jsdom',
+		setupFiles: ['./setupTests.ts']
+	}
+})
+```
+
+Finally, create that `setupTests.ts` file in the root directory and paste this in:
+
+```ts
+import '@testing-library/jest-dom/vitest'
+```
+
+and add this file to your `tsconfig.json` `include` property:
+
+```json
+"include": ["src", "setupTests.ts"],
+```
+
+That should be all you need to setup vitest. Let's write a small sample test to have our CI run at least one test.
+
+Create a new file called `App.test.tsx` in the `src` directory.
+
+> Make sure the extensions is `.tsx` not `.ts`
+
+Paste the following in the new file:
+
+```tsx
+import { describe, test, expect } from 'vitest'
+import App from './App'
+import { render, screen } from '@testing-library/react'
+
+describe('App Render', () => {
+	test('should render the app', () => {
+		render(<App />)
+		expect(screen.getByAltText('Vite logo')).toBeInTheDocument()
+		expect(screen.getByAltText('React logo')).toBeInTheDocument()
+	})
+})
+```
+
+This test just renders our `App` component and checks if the logos were rendered.
+
+Create a new `test` script in your `package.json` file:
+
+```json
+"test": "vitest --run",
+```
+
+Run `npm run test` locally to verify the test passes.
+
+This concludes the setup and we can now move on to the actually CI/CD implementation.
+
+### CI
+
+
