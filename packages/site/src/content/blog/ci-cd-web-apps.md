@@ -1,6 +1,6 @@
 ---
 title: 'Deployment Strategy for Web Apps'
-date: '2023-09-04T00:00'
+date: '2023-11-21T00:00'
 excerpt: "A guide to a straightforward deployment strategy for web apps using GitHub Actions and Vercel."
 categories: [Software, Full Stack, Deployment]
 isDraft: true
@@ -480,7 +480,7 @@ jobs:
       environment: preview
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.REAUTH_VERCEL_PROJECT_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_ACCESS_TOKEN: ${{ secrets.VERCEL_ACCESS_TOKEN }}
 ```
 
@@ -504,4 +504,90 @@ This time we only want to trigger on a published release. You can create a GitHu
 
 ![GitHub Repo Release Section](./images/ci-cd-3.png)
 
-At the top there is a button that says `Draft a new release`. Here you can choose a tag, name the release, and list the changes this release has in markdown format. When you are finished click the button that says `Publish release` at the bottom. Doing this will trigger your workflow to run. Because this is a manual process, it gives you time.
+At the top there is a button that says `Draft a new release`. Here you can choose a tag, name the release, and list the changes this release has in markdown format. When you are finished click the button that says `Publish release` at the bottom. Doing this will trigger your workflow to run. Because this is a manual process, it gives you time to test your application first (manually or automated) inside of your preview environment. Your preview environment should really be a **prod** clone, meaning it should use the exact same infrastructure setup as the production environment would. The only difference between your preview and production environment is the data inside of it. I would attempt to mimic what production data might look like in your preview environment so you can cover real-world use cases but avoid straight copying production data into your preview environment. I have seen companies do this and it causes major privacy and data integrity issues. The exception to this rule would be if the data inside your application is all public anyways and **not** personal identifiable information (PII).
+
+Okay moving onto the job for this `Release` workflow. As you might have guessed, the job setup for this workflow is going to be very similar to the previous `CI/CD` job:
+
+```yml
+name: Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  cd:
+    needs: ci
+    uses: ./.github/workflows/cd.yml
+    with:
+      environment: production
+    secrets:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_ACCESS_TOKEN: ${{ secrets.VERCEL_ACCESS_TOKEN }}
+```
+
+The only big differences are that we
+
+1. Trigger on a published release
+2. Remove our `if` key from the `cd` job because we know we want to deploy every time
+3. Our `environment` input is now set to `production`
+
+You might ask, "Why do we need to run our `ci` job again?". Good question because in theory our `CI` job should have ran on our PR to `main` and again when we did our final push to `main`. In practice this is not always guaranteed. Engineers on your teams might end up force pushing to `main` or completely bypass the action that gets run on PRs or during a push to `main`. Its always just safer to run the `CI` one additional time right before a release to ensure you are not releasing broken code to production.
+
+And that's it. You should now having a working CI/CD to run for your web applications or any other piece of software.
+
+## What's Next?
+
+This basic CI/CD setup should be enough to get you started. You can even copy this same structure for your backend applications as well, as it should work about the same especially if your backend is in `Node` as well.
+
+There are improvements that can be made to this setup though:
+
+### E2E & Smoke Tests
+
+Eventually you will want to run E2E tests and smoke tests against a passive URL, a URL that is accessible but not yet live to your users. You can use GitHub actions to deploy with Vercel and then use that url saved in the step variable to run your E2E and smoke tests against. If these tests pass, you could then do the final `vercel alias` command to make that passive url live. Doing this will ensure all your happy paths work in production. I highly recommend writing your E2E tests with [Playwright](https://playwright.dev/).
+
+### Automated Release
+
+As I mentioned before, once you are confident in your test suite of unit, integration, and E2E testing, you can begin to automate the release process. This could also be done with GitHub actions. The basic concept would be to deploy to your preview environment and run your E2E tests against it. If those tests pass it is *probably* safe to release and deploy into production automatically.
+
+The easiest way to do this would be to keep your release job as it is but automate the release creation process in GitHub. Doing this will require a way to automated your changelogs. There are many tools to do this but one that seems popular is [changesets](https://github.com/changesets/changesets) if you are in a monorepo or [conventional changelog](https://github.com/conventional-changelog/conventional-changelog) if you want something simpler. Automated changelogs are always better if you are disciplined in your commit messages. Some pre-commit tooling like [Husky](https://github.com/typicode/husky) and [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/).
+
+### Monorepos
+
+Speaking of monorepos, this current CI/CD implementation will not work if you have multiple applications in the same repo but you can solve this with some small tweaking. I would recommend creating a workflow for each application in your repo and triggering that workflow based on files changed in the latest commit. It could look something like this:
+
+```yml
+name: App1 CI/CD
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - apps/app1/**
+  pull_request:
+    branches:
+      - 'main'
+    paths:
+      - apps/app1/**
+```
+
+You can tell GitHub to trigger on a push or PR but only if the files changed were inside that path. This will allow you to run jobs for specific applications only with the correct folder structure.
+
+You can then add an `app_name` input to your `ci.yml` and `cd.yml` workflows that would conditionally run commands for just that specific application.
+
+If you are curious to learn more, comment on this post or DM me directly.
+
+## Conclusion
+
+I hope this guide helped you get started with your CI/CD.
+
+Let me know if you think I missed something or want to dive deeper on a certain topic.
+
+If you liked this content please check out my other [blog posts](https://marcusv.me/blog/) and subscribe to my [RSS feed](https://marcusv.me/rss.xml).
+
+I am also active on [Mastodon](https://mastodon.social/@marcusvirginia).
