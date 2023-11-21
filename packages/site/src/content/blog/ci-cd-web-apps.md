@@ -324,7 +324,7 @@ on:
 
 We need to know what environment this workflow will deploy to. We also define a list of secrets we need access to. Vercel's CLI requires some IDs and an access token to be able to deploy Vercel projects under your account. Learn about these Vercel variables [here](https://vercel.com/docs/deployments/configure-a-build#system-environment-variables). You will want to add them to your GitHub repo's secrets. You can find secrets in your repo's settings menu under the `security` section under `Actions`:
 
-![GitHub Security Section](./images/ci-cd-1.png)
+![GitHub Security Section](./images/ci-cd-2.png)
 
 > Note: If you don't yet have a Vercel project, you can create one using the Vercel CLI: `vercel project add`. I don't usually give Vercel direct access to my repository code and use this GitHub actions setup instead.
 
