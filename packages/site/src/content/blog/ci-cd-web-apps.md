@@ -10,7 +10,7 @@ isDraft: true
 
 So you've finally built the thing but now you might be thinking to yourself, "How do I deploy this thing"? That question gets even more complicated when you throw in all the requirements of modern continuous integration and delivery. Complexity grows even more when coordination across people or full teams needs to be managed in your deployment strategy. In this post, I will outline one of my favorite deployment strategies that you can set up right away and still have it scale to multiple team members or even across a few teams.
 
-## CI/CD
+## What is CI/CD?
 
 Continuous integration (CI) & continuous delivery/deployment (CD) are terms that are thrown around a lot when talking about deploying software. They describe the cycle of writing code, integrating that code into the codebase, usually with automation, and then deploying that code to an environment. Ideally, you want to make small, continuous improvements to your software and get those changes out to your users often and as fast as possible. CI/CD is a crucial system needed to meet this deployment goal. So what exactly is this system and how do we build it?
 
@@ -214,8 +214,294 @@ Create a new `test` script in your `package.json` file:
 
 Run `npm run test` locally to verify the test passes.
 
-This concludes the setup and we can now move on to the actually CI/CD implementation.
+This concludes the setup and we can now move on to the CI/CD implementation.
 
-### CI
+### GitHub Actions
 
+GitHub Actions uses the concept of workflows to run automated tasks. In-fact, Actions can be used to do more than CI/CD, like run jobs on issue creation or project events. We will just focus on using Actions for CI/CD today. I recommend you read over the [GitHub Actions Docs](https://docs.github.com/en/actions) after (or before) this tutorial to gain a better understanding of its components.
 
+As I hinted at before, you can configure a GitHub Actions workflow to be triggered when an event occurs in your repository, like a pull request being opened or on a merge to main. Your workflow contains one or more jobs which can run in sequential order or in parallel. Each job will run inside its own virtual machine runner, or inside a container, and has one or more steps that either run a script that you define or run an action.
+
+Workflows are defined in the `.github/workflows` folder checked into your repository. Repos can have many workflows in them. In our CI/CD setup, we will have four workflows. The first two will build and test our application and the other will deploy our application to Vercel. We are going to make these workflows reusable and reference them in our last two workflows. One will trigger just the CI workflow on a PR and the full workflow to the **preview** environment on merge to main. The other will trigger on a GitHub release and deploy the application to the production environment. With this setup, the only manual step is creating the GitHub release and I said mentioned at the beginning of this guide, it is best to keep this manual for a while until you are confident to automate your production releases. Creating the GitHub release manually is also a good time to think about and create your changelog for that specific release.
+
+> HINT: Eventually you can even create a GitHub action that creates a release for you with automated changelogs and other goodies.
+
+#### CI Action
+
+Let's start with the CI workflow. Create a new folder at the root of your repo called `.github/workflows`. Underneath that workflows folder, create a new file called `ci.yml`. Let's create a new workflow in this file. You can see the basic anatomy of a workflow [here.](https://docs.github.com/en/actions/using-workflows/about-workflows#create-an-example-workflow). First, we will give it a name and a trigger to run on.
+
+```yml
+name: Integration
+
+on: workflow_call
+```
+
+You can trigger on [many different events](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on) inside your repository but in this case we are going to call this workflow from another workflow so we trigger on the `workflow_call` event. You can name your workflow whatever you want but I will name this one `Integration`.
+
+Now we have to tell the workflow which jobs to run:
+
+```yml
+name: Integration
+
+on: workflow_call
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'npm'
+```
+
+Here we will only run one job called integrate. You must tell each job where to run, in this case we set the `runs-on` keyword to `ubuntu-latest`. This uses a Linux job runner hosted by GitHub.
+
+> You can also setup [self-hosted](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners) job runners if your company runs it's own data center.
+
+For this job, we will start with two steps. One to checkout our repo and shallow clone our code, and another to setup a Node environment so we can run our Node based build and testing tools. These steps have a `uses` keyword that seems to point to some directory structure (these are actually GitHub repos themselves). These are actions that GitHub has built in and they are very useful so use them if you can. Here is the [Checkout action](https://github.com/actions/checkout). See the [Actions organization](https://github.com/actions) for a full list. The `with` keyword in the `setup-node` step passes arguments to the action so it can use parameters to setup our perferred environment. In this case, I tell it to use Node version 20 and cache npm artifacts.
+
+Now that we have our repo checked out and Node installed, we can run any commands we want. We want this workflow to build, lint, and test our application. We already have commands in our `package.json` file to do this so let's add them to our job:
+
+```yml
+name: Integration
+
+on: workflow_call
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Lint App
+        run: npm run lint
+
+      - name: Build App
+        run: npm run build
+
+      - name: Test App
+        run: npm run test
+```
+
+Again, you can name these steps whatever you want but these are the names I gave them. I would recommend running these locally, to make sure they at least work on your machine before having the CI run it. It's probably worth running them before any PR you make, since we will run this workflow on every PR or push to an existing PR. Now that our CI is setup, we can move onto our CD workflow.
+
+#### CD Action
+
+Create a new file in the `.github/workflows` folder called `cd.yml`. We are also going to run this on the `workflow_call` event but this time we will define some inputs:
+
+```yml
+name: Deployment
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+    secrets:
+      VERCEL_ORG_ID:
+        required: true
+      VERCEL_PROJECT_ID:
+        required: true
+      VERCEL_ACCESS_TOKEN:
+        required: true
+```
+
+We need to know what environment this workflow will deploy to. We also define a list of secrets we need access to. Vercel's CLI requires some IDs and an access token to be able to deploy Vercel projects under your account. Learn about these Vercel variables [here](https://vercel.com/docs/deployments/configure-a-build#system-environment-variables). You will want to add them to your GitHub repo's secrets. You can find secrets in your repo's settings menu under the `security` section under `Actions`:
+
+![GitHub Security Section](./images/ci-cd-1.png)
+
+> Note: If you don't yet have a Vercel project, you can create one using the Vercel CLI: `vercel project add`. I don't usually give Vercel direct access to my repository code and use this GitHub actions setup instead.
+
+The Vercel CLI requires these IDs to be environment variables on the runner. We can set ENV variables on the runner using the `environment` key:
+
+```yml
+name: Deployment
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+    secrets:
+      VERCEL_ORG_ID:
+        required: true
+      VERCEL_PROJECT_ID:
+        required: true
+      VERCEL_ACCESS_TOKEN:
+        required: true
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  APP_DOMAIN: app${{ inputs.environment == 'preview' && '-preview' || '' }}.marcusv.me
+```
+
+Take a look at the `APP_DOMAIN` variables. We can do some conditional logic based on our inputs into the action. If the environment is `preview`, we want to deploy the under the domain `app-preview.marcusv.me`. Other we will deploy it under `app.marcusv.me`. Please change these urls to be your desired app urls. Don't forget to register a custom domain in the [Vercel Dashboard](https://vercel.com/docs/projects/domains/add-a-domain).
+
+Now that we have all the required inputs we can add our `deploy` job:
+
+```yml
+name: Deployment
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+    secrets:
+      VERCEL_ORG_ID:
+        required: true
+      VERCEL_PROJECT_ID:
+        required: true
+      VERCEL_ACCESS_TOKEN:
+        required: true
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  APP_DOMAIN: app${{ inputs.environment == 'preview' && '-preview' || '' }}.marcusv.me
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=${{ inputs.environment }} --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
+
+      - name: Build Project Artifacts
+        run: vercel build ${{ inputs.environment == 'production' && '--prod' || ''}} --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
+
+      - name: Deploy Project Artifacts to Vercel
+        id: deployment
+        run: echo "url=$(vercel deploy --prebuilt ${{ inputs.environment == 'production' && '--prod' || ''}} --token=${{ secrets.VERCEL_ACCESS_TOKEN }})" >> $GITHUB_OUTPUT
+
+      - name: Deployment URL
+        run: vercel alias set ${{ steps.deployment.outputs.url }} $APP_DOMAIN --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
+```
+
+We checkout our repo again and install Node just as before. Next we need to install the Vercel CLI so we can run commands to deploy our projects.
+
+I won't in detail about how the Vercel CLI works but feel free to read the [CLI docs here](https://vercel.com/docs/cli). We first need to pull down all the secrets and other environment information from Vercel using the `pull` command. Each Vercel command needs to be passed a token, which you can create via the Vercel dashboard, that gives the CLI access to your account and projects. Next we can run `vercel build` which builds the project locally with the pulled secrets. Again we can conditionally checkout our input to pass the `--prod` flag to vercel build. This flag tells Vercel to build a production version of our application.
+
+This next step we give an id of `deployment` and do something weird in the `run` key. We want to save the result of the `vercel deploy` command and use it in the next step and this is the GitHub Actions way of doing that. It looks gross I know but we will walk through it. Staring with the inner-most part, `vercel deploy` is called withe `--prebuilt` flag (because we already built in the previous step) and another conditionally rendered `--prod` flag. This command will trigger Vercel to actually deploy our app but we nest that command in this weird `url=$(..)` thing. Appending this to `$GITHUB_OUTPUT` actually sets a variable in the next step that we can access through `steps.deployment.outputs.url`. This is a `context` that we have access to inside of an expression. Don't worry, this is all documented in the [GitHub Actions docs](https://docs.github.com/en/actions/learn-github-actions/contexts) if you want to know more.
+
+Finally our last command uses the output from the `vercel deploy` command and sets up our custom domain to point at the new deployment. `$APP_DOMAIN` in that command resolves to the value in the `env` key early on in this file. That should be all we need to deploy our app with Vercel. Easy right?? Un-sarcastically this was actually the hardest part of our CI/CD setup.
+
+Currently these workflows actually never get triggered. So let's quickly write the last two workflows that call the workflows we just created.
+
+#### CI/CD Action
+
+Create a new file called `ci-cd.yml` under the `.github/workflows` folder. Give it a name and define the `on` key:
+
+```yml
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+```
+
+This time we want to trigger the workflow on actual GitHub repository events. Anytime a push **or** a PR to `main` happens we want this workflow to trigger.
+
+Now to define the jobs:
+
+```yml
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+```
+
+Our first job definition is easy because we can just call the `ci.yml` workflow directly. Notice how this is very similar to calling a built-in action with the `uses` keyword. This time we use the a relative link to point to our own workflow at `./.github/workflows/ci.yml`. This will handle the PR case. Our next job definition is a little more tricky because we only want it to run on a push to main. We can do this with the `if` key:
+
+```yml
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  cd:
+    if: ${{ github.event_name == 'push' }}
+    needs: ci
+    uses: ./.github/workflows/cd.yml
+    with:
+      environment: preview
+    secrets:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.REAUTH_VERCEL_PROJECT_ID }}
+      VERCEL_ACCESS_TOKEN: ${{ secrets.VERCEL_ACCESS_TOKEN }}
+```
+
+For our CD job, we check to see if the `event_name` is `push`. If the event_name is anything else, it will skip this job during the workflow run. We also define a `needs` keyword. This creates a dependency between this step and the previous step (I believe this is by default setup but I like to define the dependency directly.) This means that the CI step needs to pass successfully for this step to run. We don't want broken code to ever be deployed. We can also use the `with` key to populate our `inputs` in our `cd` workflow. We also pass which secrets this workflow has access to. The `uses` key is doing a `workflow_call`. We now have a workflow setup that runs on a PR or merge to `main` that calls our two different workflows.
+
+At this point its worth testing this out to make sure you can deploy into your preview environment. Make sure you have your Vercel project setup correctly and all your required secrets have been added. If you have any issues please comment on this blog post or reach out directly to me via [email](/about).
+
+#### Release Action
+
+If you were able to deploy to your preview environment, you can move onto the final step, the big release! Define one more file in the `.github/workflows` called `release.yml`:
+
+```yml
+name: Release
+
+on:
+  release:
+    types: [published]
+```
+
+This time we only want to trigger on a published release. You can create a GitHub release by clicking the releases header on the right side of the repo's homepage on GitHub.com:
+
+![GitHub Repo Release Section](./images/ci-cd-3.png)
+
+At the top there is a button that says `Draft a new release`. Here you can choose a tag, name the release, and list the changes this release has in markdown format. When you are finished click the button that says `Publish release` at the bottom. Doing this will trigger your workflow to run. Because this is a manual process, it gives you time.
