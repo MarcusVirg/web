@@ -3,7 +3,7 @@ title: 'Deployment Strategy for Web Apps'
 date: '2023-11-21T00:00'
 excerpt: "A guide to a straightforward deployment strategy for web apps using GitHub Actions and Vercel."
 categories: [Software, Full Stack, Deployment]
-isDraft: true
+isDraft: false
 ---
 
 # Deployment Strategy for Web Apps
