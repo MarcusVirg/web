@@ -16,17 +16,17 @@ Continuous integration (CI) & continuous delivery/deployment (CD) are terms that
 
 ### Continuous Integration
 
-Continuous integration, or CI, is the practice of integrating any and all code changes into the trunk or main branch of your code repository and then automating the testing, linting, style checks, and new build of those code changes. With this system in place, you can automatically detect errors and other issues that arise from your code changes much earlier in the development process. If you merge your changes often you also reduce the amount of code conflict that arises and this usually results in smaller pull requests and higher quality code reviews.
+Continuous integration, or CI, is the practice of integrating any code changes into the trunk or main branch of your code repository and then automating the testing, linting, style checks, and new build of those code changes. With this system in place, you can automatically detect errors and other issues that arise from your code changes much earlier in the development process. If you merge your changes often you also reduce the amount of code conflict that arises and this usually results in smaller pull requests and higher quality code reviews.
 
 ### Continuous Delivery
 
-Continuous delivery, or CD, is the practice of automating infrastructure provisioning, packaging, and deployment of an application to a testing environment, usually after it goes through a CI layer. DevOps and DevEx teams usually gate this CD process with some requirements like code coverage must be over 80% or the Docker container must have no critical security warnings from a container scan for example. At the end of this process, the team should be able to deploy the software changes to production quickly and easily. Ideally this is done with a single button click after some manual testing and QA of the change in the test environment.
+Continuous delivery, or CD, is the practice of automating infrastructure provisioning, packaging, and deployment of an application to a testing environment, usually after it goes through a CI layer. DevOps and DevEx teams usually gate this CD process with some requirements like code coverage must be over 80% or the Docker container must have no critical security warnings from a container scan for example. At the end of this process, the team should be able to deploy the software changes to production quickly and easily. Ideally, this is done with a single button click after some manual testing and QA of the change in the test environment.
 
 ### Continuous Deployment
 
-There is a second term for CD called continuous deployment. I like to think of continuous deployment as the more mature version of continuous delivery because this process automates the release and deployment of the changes into the production environment and into user's hands. If this is implemented correctly, a code change can be merged and then go live within a few minutes, allowing you to gather feedback and iterate quickly. Implementing continuous deployment does require more upfront investment, especially in your unit and end-to-end test suites, to ensure you do not accidentally push breaking changes to production.
+There is a second term for CD called continuous deployment. I like to think of continuous deployment as the more mature version of continuous delivery because this process automates the release and deployment of the changes into the production environment and into the user's hands. If this is implemented correctly, a code change can be merged and then go live within a few minutes, allowing you to gather feedback and iterate quickly. Implementing continuous deployment does require more upfront investment, especially in your unit and end-to-end test suites, to ensure you do not accidentally push breaking changes to production.
 
-The difference between continuous delivery and continuous deployment will be much more clear after our implementation. Atlassian has a great diagram showing the difference and how they relate to CI:
+The difference between continuous delivery and continuous deployment will be much more clear after our implementation. Atlassian has a great diagram showing the differences and how they relate to CI:
 
 ![CI-CD-diff](./images/ci-cd-1.png)
 
@@ -36,11 +36,11 @@ While you can have CI without CD, having CD without CI is generally not recommen
 
 [TLDR; just show me the code](https://github.com/MarcusVirg/sandbox/tree/main/concepts/ci-cd-fe)
 
-Now that we have a better idea of what some of these terms mean, let's go through an implementation of a CI/CD pipeline. This guide will not go through an implementation of continuous deployment as it can be implemented fairly easily after continuous integration and continuous delivery and is usually reserved for applications that have a robust controls in place. This guide will show a simple setup for doing a manual production release after continuous delivery. Unless you are one of those TDD tryhards that ship with a 99% code coverage test suite, I recommend you use a manual production release process until you have built up your own comprehensive test suite.
+Now that we have a better idea of what some of these terms mean, let's go through an implementation of a CI/CD pipeline. This guide will not go through an implementation of continuous deployment as it can be implemented fairly easily after continuous integration and continuous delivery and is usually reserved for applications that have robust controls in place. This guide will show a simple setup for doing a manual production release after continuous delivery. Unless you are one of those TDD tryhards that ship with a 99% code coverage test suite, I recommend you use a manual production release process until you have built up your own comprehensive test suite.
 
 This guide will use an example front-end application and show you how to create a CI/CD process that deploys to [Vercel](https://vercel.com/home).
 
-> Note: I am assuming you already have node installed and a development environment setup. If that isn't the case, please take time to do that now.
+> Note: I am assuming you already have Node installed and a development environment setup. If that isn't the case, please take time to do that now.
 
 ### Tools
 
@@ -58,7 +58,7 @@ They all have their pros and cons but I personally just go with GitHub actions a
 
 If you work at a company, especially a large corporation, you likely have already had this decided for you. This guide should still be useful to you either way. You will either learn more about how your existing CI/CD works or will be able to take this GitHub actions example and duplicate the functionality in your tool of choice.
 
-You will also need some tools adjacent to your CI/CD platform so you can actually build, test, and deploy your software. Your CI/CD won't do this for you, it simply runs tools to do all those things in an automated fashion.
+You will also need some tools adjacent to your CI/CD platform so you can build, test, and deploy your software. Your CI/CD won't do this for you, it simply runs tools to do all those things in an automated fashion.
 
 Here are some examples of modern web build tools:
 
@@ -89,11 +89,11 @@ In this guide, we will be using the following tools:
 - ESLint & Prettier
 - TypeScript
 
-These tools will cover the building and testing of our application but what about deployment? We need some kind of system or platform that will take our final production bundle and serve those static files, or if we are using a server rendered application, a system that runs a node server. That system should also handle DNS for us and point a url at our application (ideally with SSL already setup). This is where Vercel comes in. They are a great platform for deploying static sites and SSR web applications. We will be using their CLI tool combined with GitHub Actions to deploy the application in the CD step.
+These tools will cover the building and testing of our application but what about deployment? We need some kind of system or platform that will take our final production bundle and serve those static files, or if we are using a server-rendered application, a system that runs a node server. That system should also handle DNS for us and point a URL at our application (ideally with SSL already set up). This is where Vercel comes in. They are a great platform for deploying static sites and SSR web applications. We will be using their CLI tool combined with GitHub Actions to deploy the application in the CD step.
 
 ### Setup
 
-Let's quickly setup a React single page application using Vite so we have some project to test our CI/CD with.
+Let's quickly set up a React single-page application using Vite so we have a project to test our CI/CD with.
 
 > If you already have an existing project, please skip this step and go to [CI](#ci).
 
@@ -109,7 +109,7 @@ Enter a project name, select `React` as the framework, select `TypeScript` as th
 
 #### Prettier
 
-To setup Prettier, run:
+To set up Prettier, run:
 
 ```sh
 npm install --save-dev prettier eslint-config-prettier
@@ -126,16 +126,16 @@ extends: [
 ],
 ```
 
-Its also worth adding a `.prettierrc` to configure prettier to your liking here is an example:
+It's also worth adding a `.prettierrc` to configure prettier to your liking here is an example:
 
 ```json
 {
-	"useTabs": true,
-	"tabWidth": 2,
-	"semi": false,
-	"singleQuote": true,
-	"trailingComma": "none",
-	"printWidth": 100
+  "useTabs": true,
+  "tabWidth": 2,
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "none",
+  "printWidth": 100
 }
 ```
 
@@ -162,11 +162,11 @@ import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-	plugins: [react()],
-	test: {
-		environment: 'jsdom',
-		setupFiles: ['./setupTests.ts']
-	}
+  plugins: [react()],
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./setupTests.ts']
+  }
 })
 ```
 
@@ -182,7 +182,7 @@ and add this file to your `tsconfig.json` `include` property:
 "include": ["src", "setupTests.ts"],
 ```
 
-That should be all you need to setup vitest. Let's write a small sample test to have our CI run at least one test.
+That should be all you need to set up vitest. Let's write a small sample test to have our CI run at least one test.
 
 Create a new file called `App.test.tsx` in the `src` directory.
 
@@ -196,11 +196,11 @@ import App from './App'
 import { render, screen } from '@testing-library/react'
 
 describe('App Render', () => {
-	test('should render the app', () => {
-		render(<App />)
-		expect(screen.getByAltText('Vite logo')).toBeInTheDocument()
-		expect(screen.getByAltText('React logo')).toBeInTheDocument()
-	})
+  test('should render the app', () => {
+    render(<App />)
+    expect(screen.getByAltText('Vite logo')).toBeInTheDocument()
+    expect(screen.getByAltText('React logo')).toBeInTheDocument()
+  })
 })
 ```
 
@@ -218,11 +218,11 @@ This concludes the setup and we can now move on to the CI/CD implementation.
 
 ### GitHub Actions
 
-GitHub Actions uses the concept of workflows to run automated tasks. In-fact, Actions can be used to do more than CI/CD, like run jobs on issue creation or project events. We will just focus on using Actions for CI/CD today. I recommend you read over the [GitHub Actions Docs](https://docs.github.com/en/actions) after (or before) this tutorial to gain a better understanding of its components.
+GitHub Actions uses the concept of workflows to run automated tasks. In fact, Actions can be used to do more than CI/CD, like run jobs on issue creation or project events. We will just focus on using Actions for CI/CD today. I recommend you read over the [GitHub Actions Docs](https://docs.github.com/en/actions) after (or before) this tutorial to gain a better understanding of its components.
 
-As I hinted at before, you can configure a GitHub Actions workflow to be triggered when an event occurs in your repository, like a pull request being opened or on a merge to main. Your workflow contains one or more jobs which can run in sequential order or in parallel. Each job will run inside its own virtual machine runner, or inside a container, and has one or more steps that either run a script that you define or run an action.
+As I hinted at before, you can configure a GitHub Actions workflow to be triggered when an event occurs in your repository, like a pull request being opened or on a merge to main. Your workflow contains one or more jobs that can run in sequential order or in parallel. Each job will run inside its own virtual machine runner, or inside a container, and has one or more steps that either run a script that you define or run an action.
 
-Workflows are defined in the `.github/workflows` folder checked into your repository. Repos can have many workflows in them. In our CI/CD setup, we will have four workflows. The first two will build and test our application and the other will deploy our application to Vercel. We are going to make these workflows reusable and reference them in our last two workflows. One will trigger just the CI workflow on a PR and the full workflow to the **preview** environment on merge to main. The other will trigger on a GitHub release and deploy the application to the production environment. With this setup, the only manual step is creating the GitHub release and I said mentioned at the beginning of this guide, it is best to keep this manual for a while until you are confident to automate your production releases. Creating the GitHub release manually is also a good time to think about and create your changelog for that specific release.
+Workflows are defined in the `.github/workflows` folder checked into your repository. Repos can have many workflows in them. In our CI/CD setup, we will have four workflows. The first two will build and test our application and the other will deploy our application to Vercel. We are going to make these workflows reusable and reference them in our last two workflows. One will trigger just the CI workflow on a PR and the full workflow to the **preview** environment on merge to main. The other will trigger on a GitHub release and deploy the application to the production environment. With this setup, the only manual step is creating the GitHub release, and as I mentioned at the beginning of this guide, it is best to keep this manual for a while until you are confident to automate your production releases. Creating the GitHub release manually is also a good time to think about and create your changelog for that specific release.
 
 > HINT: Eventually you can even create a GitHub action that creates a release for you with automated changelogs and other goodies.
 
@@ -236,7 +236,7 @@ name: Integration
 on: workflow_call
 ```
 
-You can trigger on [many different events](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on) inside your repository but in this case we are going to call this workflow from another workflow so we trigger on the `workflow_call` event. You can name your workflow whatever you want but I will name this one `Integration`.
+You can trigger on [many different events](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on) inside your repository but in this case, we are going to call this workflow from another workflow so we trigger on the `workflow_call` event. You can name your workflow whatever you want but I will name this one `Integration`.
 
 Now we have to tell the workflow which jobs to run:
 
@@ -259,11 +259,11 @@ jobs:
           cache: 'npm'
 ```
 
-Here we will only run one job called integrate. You must tell each job where to run, in this case we set the `runs-on` keyword to `ubuntu-latest`. This uses a Linux job runner hosted by GitHub.
+Here we will only run one job called integrate. You must tell each job where to run, in this case, we set the `runs-on` keyword to `ubuntu-latest`. This uses a Linux job runner hosted by GitHub.
 
-> You can also setup [self-hosted](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners) job runners if your company runs it's own data center.
+> You can also set up [self-hosted](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners) job runners if your company runs its own data center.
 
-For this job, we will start with two steps. One to checkout our repo and shallow clone our code, and another to setup a Node environment so we can run our Node based build and testing tools. These steps have a `uses` keyword that seems to point to some directory structure (these are actually GitHub repos themselves). These are actions that GitHub has built in and they are very useful so use them if you can. Here is the [Checkout action](https://github.com/actions/checkout). See the [Actions organization](https://github.com/actions) for a full list. The `with` keyword in the `setup-node` step passes arguments to the action so it can use parameters to setup our perferred environment. In this case, I tell it to use Node version 20 and cache npm artifacts.
+For this job, we will start with two steps. One to check out our repo and shallow clone our code, and another to set up a Node environment so we can run our Node-based build and testing tools. These steps have a `uses` keyword that seems to point to some directory structure (these are actually GitHub repos themselves). These are actions that GitHub has built in and they are very useful so use them if you can. Here is the [Checkout action](https://github.com/actions/checkout). See the [Actions organization](https://github.com/actions) for a full list. The `with` keyword in the `setup-node` step passes arguments to the action so it can use parameters to set up our preferred environment. In this case, I tell it to use Node version 20 and cache npm artifacts.
 
 Now that we have our repo checked out and Node installed, we can run any commands we want. We want this workflow to build, lint, and test our application. We already have commands in our `package.json` file to do this so let's add them to our job:
 
@@ -298,7 +298,7 @@ jobs:
         run: npm run test
 ```
 
-Again, you can name these steps whatever you want but these are the names I gave them. I would recommend running these locally, to make sure they at least work on your machine before having the CI run it. It's probably worth running them before any PR you make, since we will run this workflow on every PR or push to an existing PR. Now that our CI is setup, we can move onto our CD workflow.
+Again, you can name these steps whatever you want but these are the names I gave them. I would recommend running these locally, to make sure they at least work on your machine before having the CI run it. It's probably worth running them before any PR you make since we will run this workflow on every PR or push to an existing PR. Now that our CI is set up, we can move on to our CD workflow.
 
 #### CD Action
 
@@ -353,7 +353,7 @@ env:
   APP_DOMAIN: app${{ inputs.environment == 'preview' && '-preview' || '' }}.marcusv.me
 ```
 
-Take a look at the `APP_DOMAIN` variables. We can do some conditional logic based on our inputs into the action. If the environment is `preview`, we want to deploy the under the domain `app-preview.marcusv.me`. Other we will deploy it under `app.marcusv.me`. Please change these urls to be your desired app urls. Don't forget to register a custom domain in the [Vercel Dashboard](https://vercel.com/docs/projects/domains/add-a-domain).
+Take a look at the `APP_DOMAIN` variables. We can do some conditional logic based on our inputs into the action. If the environment is `preview`, we want to deploy the under the domain `app-preview.marcusv.me`. Other we will deploy it under `app.marcusv.me`. Please change these URLs to your desired app URLs. Don't forget to register a custom domain in the [Vercel Dashboard](https://vercel.com/docs/projects/domains/add-a-domain).
 
 Now that we have all the required inputs we can add our `deploy` job:
 
@@ -409,15 +409,15 @@ jobs:
         run: vercel alias set ${{ steps.deployment.outputs.url }} $APP_DOMAIN --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
 ```
 
-We checkout our repo again and install Node just as before. Next we need to install the Vercel CLI so we can run commands to deploy our projects.
+We check out our repo again and install Node just as before. Next, we need to install the Vercel CLI so we can run commands to deploy our projects.
 
-I won't in detail about how the Vercel CLI works but feel free to read the [CLI docs here](https://vercel.com/docs/cli). We first need to pull down all the secrets and other environment information from Vercel using the `pull` command. Each Vercel command needs to be passed a token, which you can create via the Vercel dashboard, that gives the CLI access to your account and projects. Next we can run `vercel build` which builds the project locally with the pulled secrets. Again we can conditionally checkout our input to pass the `--prod` flag to vercel build. This flag tells Vercel to build a production version of our application.
+I won't cover in detail how the Vercel CLI works but feel free to read the [CLI docs here](https://vercel.com/docs/cli). We first need to pull down all the secrets and other environment information from Vercel using the `pull` command. Each Vercel command needs to be passed a token, which you can create via the Vercel dashboard, that gives the CLI access to your account and projects. Next, we can run `vercel build` which builds the project locally with the pulled secrets. Again we can conditionally check our input to pass the `--prod` flag to vercel build. This flag tells Vercel to build a production version of our application.
 
-This next step we give an id of `deployment` and do something weird in the `run` key. We want to save the result of the `vercel deploy` command and use it in the next step and this is the GitHub Actions way of doing that. It looks gross I know but we will walk through it. Staring with the inner-most part, `vercel deploy` is called withe `--prebuilt` flag (because we already built in the previous step) and another conditionally rendered `--prod` flag. This command will trigger Vercel to actually deploy our app but we nest that command in this weird `url=$(..)` thing. Appending this to `$GITHUB_OUTPUT` actually sets a variable in the next step that we can access through `steps.deployment.outputs.url`. This is a `context` that we have access to inside of an expression. Don't worry, this is all documented in the [GitHub Actions docs](https://docs.github.com/en/actions/learn-github-actions/contexts) if you want to know more.
+In this next step we give an ID of `deployment` and do something weird in the `run` key. We want to save the result of the `vercel deploy` command and use it in the next step and this is the GitHub Actions way of doing that. It looks gross I know but we will walk through it. Staring with the inner-most part, `vercel deploy` is called with the `--prebuilt` flag (because we already built in the previous step) and another conditionally rendered `--prod` flag. This command will trigger Vercel to deploy our app but we nest that command in this weird `url=$(..)` thing. Appending this to `$GITHUB_OUTPUT` actually sets a variable in the next step that we can access through `steps.deployment.outputs.url`. This is a `context` that we have access to inside of an expression. Don't worry, this is all documented in the [GitHub Actions docs](https://docs.github.com/en/actions/learn-github-actions/contexts) if you want to know more.
 
-Finally our last command uses the output from the `vercel deploy` command and sets up our custom domain to point at the new deployment. `$APP_DOMAIN` in that command resolves to the value in the `env` key early on in this file. That should be all we need to deploy our app with Vercel. Easy right?? Un-sarcastically this was actually the hardest part of our CI/CD setup.
+Finally, our last command uses the output from the `vercel deploy` command and sets up our custom domain to point at the new deployment. `$APP_DOMAIN` in that command resolves to the value in the `env` key early on in this file. That should be all we need to deploy our app with Vercel. Easy right?? Un-sarcastically this was actually the hardest part of our CI/CD setup.
 
-Currently these workflows actually never get triggered. So let's quickly write the last two workflows that call the workflows we just created.
+Currently these workflows never get triggered. So let's quickly write the last two workflows that call the workflows we just created.
 
 #### CI/CD Action
 
@@ -455,7 +455,7 @@ jobs:
     uses: ./.github/workflows/ci.yml
 ```
 
-Our first job definition is easy because we can just call the `ci.yml` workflow directly. Notice how this is very similar to calling a built-in action with the `uses` keyword. This time we use the a relative link to point to our own workflow at `./.github/workflows/ci.yml`. This will handle the PR case. Our next job definition is a little more tricky because we only want it to run on a push to main. We can do this with the `if` key:
+Our first job definition is easy because we can just call the `ci.yml` workflow directly. Notice how this is very similar to calling a built-in action with the `uses` keyword. This time we use a relative link to point to our own workflow at `./.github/workflows/ci.yml`. This will handle the PR case. Our next job definition is a little more tricky because we only want it to run on a push to main. We can do this with the `if` key:
 
 ```yml
 name: CI/CD
@@ -486,11 +486,11 @@ jobs:
 
 For our CD job, we check to see if the `event_name` is `push`. If the event_name is anything else, it will skip this job during the workflow run. We also define a `needs` keyword. This creates a dependency between this step and the previous step (I believe this is by default setup but I like to define the dependency directly.) This means that the CI step needs to pass successfully for this step to run. We don't want broken code to ever be deployed. We can also use the `with` key to populate our `inputs` in our `cd` workflow. We also pass which secrets this workflow has access to. The `uses` key is doing a `workflow_call`. We now have a workflow setup that runs on a PR or merge to `main` that calls our two different workflows.
 
-At this point its worth testing this out to make sure you can deploy into your preview environment. Make sure you have your Vercel project setup correctly and all your required secrets have been added. If you have any issues please comment on this blog post or reach out directly to me via [email](/about).
+At this point, it's worth testing this out to make sure you can deploy into your preview environment. Make sure you have your Vercel project set up correctly and that all your required secrets have been added. If you have any issues please comment on this blog post or reach out directly to me via [email](/about).
 
 #### Release Action
 
-If you were able to deploy to your preview environment, you can move onto the final step, the big release! Define one more file in the `.github/workflows` called `release.yml`:
+If you were able to deploy to your preview environment, you can move on to the final step, the big release! Define one more file in the `.github/workflows` called `release.yml`:
 
 ```yml
 name: Release
@@ -504,7 +504,7 @@ This time we only want to trigger on a published release. You can create a GitHu
 
 ![GitHub Repo Release Section](./images/ci-cd-3.png)
 
-At the top there is a button that says `Draft a new release`. Here you can choose a tag, name the release, and list the changes this release has in markdown format. When you are finished click the button that says `Publish release` at the bottom. Doing this will trigger your workflow to run. Because this is a manual process, it gives you time to test your application first (manually or automated) inside of your preview environment. Your preview environment should really be a **prod** clone, meaning it should use the exact same infrastructure setup as the production environment would. The only difference between your preview and production environment is the data inside of it. I would attempt to mimic what production data might look like in your preview environment so you can cover real-world use cases but avoid straight copying production data into your preview environment. I have seen companies do this and it causes major privacy and data integrity issues. The exception to this rule would be if the data inside your application is all public anyways and **not** personal identifiable information (PII).
+At the top, there is a button that says `Draft a new release`. Here you can choose a tag, name the release, and list the changes this release has in markdown format. When you are finished click the button that says `Publish release` at the bottom. Doing this will trigger your workflow to run. Because this is a manual process, it gives you time to test your application first (manually or automated) inside of your preview environment. Your preview environment should really be a **prod** clone, meaning it should use the exact same infrastructure setup as the production environment would. The only difference between your preview and production environment is the data inside of it. I would attempt to mimic what production data might look like in your preview environment so you can cover real-world use cases but avoid straight copying production data into your preview environment. I have seen companies do this and it causes major privacy and data integrity issues. The exception to this rule would be if the data inside your application is all public anyways and **not** personally identifiable information (PII).
 
 Okay moving onto the job for this `Release` workflow. As you might have guessed, the job setup for this workflow is going to be very similar to the previous `CI/CD` job:
 
@@ -530,31 +530,31 @@ jobs:
       VERCEL_ACCESS_TOKEN: ${{ secrets.VERCEL_ACCESS_TOKEN }}
 ```
 
-The only big differences are that we
+The only big difference is that we
 
 1. Trigger on a published release
 2. Remove our `if` key from the `cd` job because we know we want to deploy every time
 3. Our `environment` input is now set to `production`
 
-You might ask, "Why do we need to run our `ci` job again?". Good question because in theory our `CI` job should have ran on our PR to `main` and again when we did our final push to `main`. In practice this is not always guaranteed. Engineers on your teams might end up force pushing to `main` or completely bypass the action that gets run on PRs or during a push to `main`. Its always just safer to run the `CI` one additional time right before a release to ensure you are not releasing broken code to production.
+You might ask, "Why do we need to run our `ci` job again?". Good question because in theory, our `CI` job should have run on our PR to `main` and again when we did our final push to `main`. In practice, this is not always guaranteed. Engineers on your teams might end up force pushing to `main` or completely bypass the action that gets run on PRs or during a push to `main`. It is always safer to run the `CI` one additional time right before a release to ensure you are not releasing broken code to production.
 
-And that's it. You should now having a working CI/CD to run for your web applications or any other piece of software.
+And that's it. You should now have a working CI/CD to run for your web applications or any other piece of software.
 
 ## What's Next?
 
 This basic CI/CD setup should be enough to get you started. You can even copy this same structure for your backend applications as well, as it should work about the same especially if your backend is in `Node` as well.
 
-There are improvements that can be made to this setup though:
+Some improvements can be made to this setup though:
 
 ### E2E & Smoke Tests
 
-Eventually you will want to run E2E tests and smoke tests against a passive URL, a URL that is accessible but not yet live to your users. You can use GitHub actions to deploy with Vercel and then use that url saved in the step variable to run your E2E and smoke tests against. If these tests pass, you could then do the final `vercel alias` command to make that passive url live. Doing this will ensure all your happy paths work in production. I highly recommend writing your E2E tests with [Playwright](https://playwright.dev/).
+Eventually, you will want to run E2E tests and smoke tests against a passive URL, a URL that is accessible but not yet live to your users. You can use GitHub actions to deploy with Vercel and then use that URL saved in the step variable to run your E2E and smoke tests against. If these tests pass, you could then do the final `vercel alias` command to make that passive url live. Doing this will ensure all your happy paths work in production. I highly recommend writing your E2E tests with [Playwright](https://playwright.dev/).
 
 ### Automated Release
 
 As I mentioned before, once you are confident in your test suite of unit, integration, and E2E testing, you can begin to automate the release process. This could also be done with GitHub actions. The basic concept would be to deploy to your preview environment and run your E2E tests against it. If those tests pass it is *probably* safe to release and deploy into production automatically.
 
-The easiest way to do this would be to keep your release job as it is but automate the release creation process in GitHub. Doing this will require a way to automated your changelogs. There are many tools to do this but one that seems popular is [changesets](https://github.com/changesets/changesets) if you are in a monorepo or [conventional changelog](https://github.com/conventional-changelog/conventional-changelog) if you want something simpler. Automated changelogs are always better if you are disciplined in your commit messages. Some pre-commit tooling like [Husky](https://github.com/typicode/husky) and [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/).
+The easiest way to do this would be to keep your release job as it is but automate the release creation process in GitHub. Doing this will require a way to automate your changelogs. There are many tools to do this but one that seems popular is [changesets](https://github.com/changesets/changesets) if you are in a monorepo or [conventional changelog](https://github.com/conventional-changelog/conventional-changelog) if you want something simpler. Automated changelogs are always better if you are disciplined in your commit messages. Some pre-commit tooling like [Husky](https://github.com/typicode/husky) and [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/).
 
 ### Monorepos
 
@@ -586,7 +586,7 @@ If you are curious to learn more, comment on this post or DM me directly.
 
 I hope this guide helped you get started with your CI/CD.
 
-Let me know if you think I missed something or want to dive deeper on a certain topic.
+Let me know if you think I missed something or want to dive deeper into a certain topic.
 
 If you liked this content please check out my other [blog posts](https://marcusv.me/blog/) and subscribe to my [RSS feed](https://marcusv.me/rss.xml).
 
