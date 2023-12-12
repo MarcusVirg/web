@@ -1,5 +1,7 @@
-import Tabs from '@theme/Tabs'
-import TabItem from '@theme/TabItem'
+---
+title: React Context
+description: Code snippets for using React Context.
+---
 
 # React Context
 
@@ -11,10 +13,7 @@ Keep state local by default and only use the Context API to avoid deep prop dril
 
 One common usecase I will show is storing authentication data in an `AuthProvider` and pulling that data into a child component using the Context API.
 
-<Tabs>
-<TabItem value="auth-provider" label="AuthProvider.tsx">
-
-```ts
+```ts title="AuthProvider.tsx"
 import React, { useEffect, useMemo, useState } from 'react'
 
 type Session = {
@@ -85,23 +84,17 @@ function AuthProvider({
 export default AuthProvider
 ```
 
-</TabItem>
-<TabItem value="use-auth" label="useAuth.ts">
-
-```ts
+```ts title="useAuth.ts"
 import { useContext } from 'react'
 import { AuthContext } from './AuthProvider'
 
 function useAuth() {
-  const context = useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider')
-  }
-  return context
+	const context = useContext(AuthContext)
+	if (context === undefined) {
+		throw new Error('useAuth must be used within an AuthProvider')
+	}
+	return context
 }
 
 export default useAuth
 ```
-
-</TabItem>
-</Tabs>

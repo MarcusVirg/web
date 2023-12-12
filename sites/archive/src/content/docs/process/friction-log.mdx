@@ -1,6 +1,9 @@
 ---
-sidebar_position: 1
+title: Friction Log
+description: A reference page in my new Starlight docs site.
 ---
+
+import Highlight from '../../../components/Highlight.astro'
 
 # Intro
 
@@ -99,29 +102,71 @@ I think the best people to do this exercise are those who are unfamiliar with th
 
 1. Pick the flow, process, or set of tasks that you would like your user to do.
 
-2. Include some nice-to-have metadata about the tasks like who did the exercise, what was the date, what was their environment (OS or Browser),
-   and the task set or flow being used.
+2. Include some nice-to-have metadata about the tasks like who did the exercise, what was the date, what was their environment (OS or Browser), and the task set or flow being used.
 
 3. Create a simple key or legend so you can map a task to an emotion. I recommend using colors to map things;
    Green => Easy. Makes sense!<br />
    Yellow => Had to work a little bit to get past it, wasn't great.<br />
    Red => Would have given up if I didn't work here.<br />
-   You can also just use easy text markers or emojis as a map. See the [example log](./example.md) for ideas.
+   You can also just use easy text markers or emojis as a map.
 
-4. Narrate your experience and write down steps taken. For each step, assign it to a color in your key and talk about what went through your mind.
-   This experience can just be recorded with a document, an audio recording, or a full video recording ideally with screen sharing.
-   The idea is to create some live commentary about the task you are doing and your thoughts on it. You can use whatever medium you feel is necessary to provide that.
+4. Narrate your experience and write down steps taken. For each step, assign it to a color in your key and talk about what went through your mind. This experience can just be recorded with a document, an audio recording, or a full video recording ideally with screen sharing. The idea is to create some live commentary about the task you are doing and your thoughts on it. You can use whatever medium you feel is necessary to provide that.
 
 ## Sharing the log
 
-These logs provide no value if no one looks at them. After you have finished this exercise share it with your teammates and other teams at your company.
-Often the best place to share them is where your DX organization lives so they can add tasks to their necessary backlogs
+These logs provide no value if no one looks at them. After you have finished this exercise share it with your teammates and other teams at your company. Often the best place to share them is where your DX organization lives so they can add tasks to their necessary backlogs
 and start looking at your experience and discoveries.
 
-Choosing the format of these logs is really up to you.
-I provide this [template] in a markdown format as it gives you come nice structured and styled text
-while also being interoperable between content platforms. (GitHub, Blog Sites, static site generators, etc)
+Choosing the format of these logs is really up to you. I provide an example and a template below you can copy in a simple markdown format as it gives you come nice structured and styled text while also being interoperable between content platforms. (GitHub, Blog Sites, static site generators, etc)
 
-You could also use Google Docs, Notion, Microsoft OneNote, etc. to write and distribute these logs.
+You could also use Google Docs, Notion, Microsoft OneNote, etc to write and distribute these logs.
 
 Now go on be free and starting logging that friction.
+
+## Example
+
+# Friction Log
+
+| Item | Value |
+| ---- | ---- |
+| Who is doing this? | Marcus Virginia |
+| Date | 2023-01-12 |
+| Use Case | Showing off a concept |
+| Environment | Chrome Browser on Windows 11 |
+| Key | <Highlight color="#22c55e">Green</Highlight>: Easy. Makes sense!<br /><Highlight color="#eab308">Yellow</Highlight>: Had to work a little bit to get past it, wasn't great.<br /><Highlight color="#f43f5e">Red</Highlight>: Would have given up if I didn't work here. |
+
+## My experience completing some awesome task
+
+1. I want to navigate to my projects (<Highlight color="#22c55e">Easy</Highlight>)<br />
+   It was really easy, my projects are listed on the home page of my site and there is also a `projects` link in the navigation bar.
+
+2. I want to subscribe to my RSS feed. (<Highlight color="#eab308">Fine</Highlight>)<br />
+   There was a small RSS icon on the homepage that was a little hard to find. Clicking it took me to a page with a link to my RSS feed. I had to copy the link and then add it to my RSS reader. It was pretty standard but the initial icon was a bit hard to find.
+
+3. Finished!
+
+## Template
+
+```md
+# Friction Log
+
+| Item | Value |
+| ---- | ---- |
+| Who is doing this? | {name} |
+| Date | {yyyy-mm-dd} |
+| Use Case | {description} |
+| Environment | {env_info} |
+| Key | 😃: Easy. Makes sense!<br />🤔: Had to work a little bit to get past it, wasn't great.<br />😟: Would have given up if I didn't work here. |
+
+## My experience completing {task_title_here}
+
+1. simple description of task ({key_here})<br />
+   Add more thoughts about task here.
+
+2. another description that should just fit on one line. ({key_here})<br />
+   Again add further narration here if necessary.
+
+...add all other tasks
+
+3. Finished!
+```

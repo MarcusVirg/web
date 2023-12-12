@@ -1,0 +1,17 @@
+---
+type Props = {
+	color: string
+}
+const { color } = Astro.props
+---
+
+<span
+	style={{
+		backgroundColor: color,
+		borderRadius: '4px',
+		color: '#fff',
+		padding: '0.2rem'
+	}}
+>
+	<slot />
+</span>
