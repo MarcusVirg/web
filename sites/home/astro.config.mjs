@@ -1,5 +1,4 @@
 import { defineConfig } from 'astro/config'
-import prefetch from '@astrojs/prefetch'
 import sitemap from '@astrojs/sitemap'
 import tailwind from '@astrojs/tailwind'
 import svelte from '@astrojs/svelte'
@@ -17,11 +16,12 @@ function readingTime() {
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://marcusv.me',
-	integrations: [prefetch(), sitemap(), tailwind(), svelte()],
+	integrations: [sitemap(), tailwind(), svelte()],
 	markdown: {
 		remarkPlugins: [readingTime],
 		shikiConfig: {
 			theme: 'one-dark-pro'
 		}
-	}
+	},
+	prefetch: true
 })

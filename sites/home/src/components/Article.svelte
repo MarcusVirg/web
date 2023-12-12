@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { Post } from '../content/_schemas'
+	import type { CollectionEntry } from 'astro:content'
 
 	export let slug: string
-	export let post: Post
+	export let post: CollectionEntry<'blog'>['data']
 	export let showDate = false
 </script>
 
@@ -23,7 +23,7 @@
 		<div
 			class="absolute -inset-y-6 -inset-x-4 z-0 scale-95 bg-zinc-800/50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 sm:-inset-x-6 sm:rounded-2xl"
 		/>
-		<a href={`/blog/${slug}`} rel="prefetch">
+		<a href={`/blog/${slug}`} rel="prefetch" data-astro-prefetch>
 			<span
 				class="absolute -inset-y-6 -inset-x-4 z-20 sm:-inset-x-6 sm:rounded-2xl"
 			/>

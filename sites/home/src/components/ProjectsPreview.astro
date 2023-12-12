@@ -27,6 +27,7 @@ const projectsCollection = await getCollection('projects', ({ data: project }) =
 							class="relative flex w-full space-x-4 items-center"
 							href={`/projects/${project.slug}`}
 							rel="prefetch"
+							data-astro-prefetch
 						>
 							<div class="relative h-10 w-10 flex items-center overflow-hidden justify-center rounded-full bg-zinc-800 shadow-md shadow-zinc-800/5 border border-zinc-700/50">
 								<Image

@@ -3,10 +3,10 @@
 	"version": "0.1.0",
 	"private": true,
 	"workspaces": [
-		"packages/*"
+		"sites/*"
 	],
 	"scripts": {
-		"docs": "npm run --prefix packages/convenience-store start",
-		"site": "npm run --prefix packages/site dev"
+		"archive:dev": "npm run --prefix sites/archive dev",
+		"main:dev": "npm run --prefix sites/home dev"
 	}
 }
