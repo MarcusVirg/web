@@ -95,7 +95,7 @@ These tools will cover the building and testing of our application but what abou
 
 Let's quickly set up a React single-page application using Vite so we have a project to test our CI/CD with.
 
-> If you already have an existing project, please skip this step and go to [CI](#ci).
+> If you already have an existing project, please skip this step and go to [CI](#ci-action).
 
 #### Vite CLI
 
