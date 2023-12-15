@@ -1,0 +1,12 @@
+---
+// @ts-ignore
+import { Icon } from 'astro-icon'
+
+type Props = {
+	class?: string
+	name: string
+}
+const { class: className = '', name } = Astro.props
+---
+
+<Icon class={className} name={name} />
