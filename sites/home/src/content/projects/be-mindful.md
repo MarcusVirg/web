@@ -1,15 +1,14 @@
 ---
-title: 'Resplice'
-description: 'Solving identity by changing the way we connect & share.'
+title: 'BeMindful'
+description: 'Journaling & deep conversations with friends. Once a day, everyday.'
 logo: './images/resplice-logo.png'
-website: 'https://www.resplice.com'
-github: 'https://github.com/Resplice/web'
-categories: [Elixir, Svelte, PWA]
-sortOrder: 2
+website: 'https://www.bemindful.tech'
+categories: [React, Tauri, Go, PostgreSQL]
+sortOrder: 1
 isDraft: false
 ---
 
-# Resplice
+# BeMindful
 
 [Resplice](https://www.resplice.com/) is a new way to share and communicate information with your network of people. Its core feature is a contact or address book that flips the model of traditional contact management. Currently everyone just manages their contacts and network on their phone. This leads to information quickly becoming out of date and shifts the control of what information is known and can be seen about a specific person. Resplice flips that model. In Resplice, contacts manage themselves in your phone. Contacts can choose exactly what you see about them and any information they update also updates for you.
 

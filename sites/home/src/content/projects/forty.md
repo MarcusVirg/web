@@ -5,7 +5,7 @@ logo: './images/gohugo-logo.png'
 website: 'https://html5up.net/uploads/demos/forty'
 github: 'https://github.com/MarcusVirg/forty'
 categories: [Go, SSG, Theme]
-sortOrder: 4
+sortOrder: 5
 isDraft: false
 ---
 

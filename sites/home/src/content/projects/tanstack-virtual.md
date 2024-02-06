@@ -4,7 +4,7 @@ description: 'A virtualization library for Svelte inside TanStack.'
 logo: './images/tanstack.png'
 website: 'https://tanstack.com/virtual/v3'
 categories: [Svelte, Open Source]
-sortOrder: 2
+sortOrder: 3
 isDraft: false
 ---
 
