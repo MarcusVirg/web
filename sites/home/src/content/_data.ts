@@ -47,6 +47,11 @@ export const socialsData: Social[] = [
 		url: 'https://www.linkedin.com/in/marcusvirginia/'
 	},
 	{
+		name: 'twitch',
+		icon: 'logo-twitch',
+		url: 'https://www.twitch.tv/marcuscodez'
+	},
+	{
 		name: 'instagram',
 		icon: 'logo-instagram',
 		url: 'https://www.instagram.com/marcusjvirginia/'
@@ -139,7 +144,8 @@ export const usesData: [string, UsesItem[]][] = [
 			{
 				title: 'WSL2',
 				description:
-					'Because my main workstation is running Windows, doing development there tends to be a bit painful... This is where WSL2 comes in. It basically gives me a full Linux environment that has its own file system but also has access to the Windows file system. I install all of my development tools and code in the WSL2 file system. The VS Code WSL extension works very well and allows me to use zsh in the integrated terminal. This is the only way I would recommend developing in a Windows environment.'
+					'Because my main workstation is running Windows, doing development there tends to be a bit painful... This is where WSL2 comes in. It basically gives me a full Linux environment that has its own file system but also has access to the Windows file system. I install all of my development tools and code in the WSL2 file system. The VS Code WSL extension works very well and allows me to use zsh in the integrated terminal. This is the only way I would recommend developing in a Windows environment.',
+				link: 'https://learn.microsoft.com/en-us/windows/wsl/about#what-is-wsl-2'
 			},
 			{
 				title: 'Dev Containers',
