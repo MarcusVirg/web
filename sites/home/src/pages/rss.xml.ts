@@ -1,6 +1,6 @@
 import rss from '@astrojs/rss'
 import { getCollection } from 'astro:content'
-import { onlyFinalPosts } from '../content/config'
+import { onlyFinalPosts } from '../content/content.utils'
 
 export async function GET() {
 	const blogCollection = await getCollection('blog', onlyFinalPosts)
@@ -13,7 +13,7 @@ export async function GET() {
 			title: post.data.title,
 			pubDate: post.data.date,
 			description: post.data.excerpt,
-			link: `/blog/${post.slug}/`
+			link: `/blog/${post.id}/`
 		})),
 		customData: `<language>en-us</language>`,
 		stylesheet: '/rss-styles.xsl'

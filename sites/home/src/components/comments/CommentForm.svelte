@@ -1,15 +1,17 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte'
 	import TextArea from './TextArea.svelte'
 	import TextField from './TextField.svelte'
 	import type { CommentAggregate } from '../../functions/utils/events'
 
-	const dispatch = createEventDispatcher()
+	type Props = {
+		comment: Pick<CommentAggregate, 'author' | 'comment'>
+		onCommentSubmission: () => void
+	}
+	let { comment = $bindable(), onCommentSubmission }: Props = $props()
+	let formErrors: Record<string, string> = $state({})
 
-	export let comment: Pick<CommentAggregate, 'author' | 'comment'>
-	let formErrors: Record<string, string> = {}
-
-	function onSubmit() {
+	function onsubmit(e: SubmitEvent) {
+		e.preventDefault()
 		formErrors = {}
 		const errors: Record<string, string> = {}
 		if (!comment.author) errors.author = 'Author is required'
@@ -23,11 +25,11 @@
 			formErrors = errors
 			return
 		}
-		dispatch('submit')
+		onCommentSubmission()
 	}
 </script>
 
-<form on:submit|preventDefault={onSubmit} class="space-y-4">
+<form {onsubmit} class="space-y-4">
 	<TextField
 		name="author"
 		label="Name"

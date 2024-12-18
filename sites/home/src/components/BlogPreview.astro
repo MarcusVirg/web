@@ -14,6 +14,6 @@ const blogCollection = await getCollection('blog', ({ data: post }) =>
 		blogCollection
 			.sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
 			.slice(0, 3)
-			.map((post) => <Article slug={post.slug} post={post.data} showDate />)
+			.map((post) => <Article id={post.id} post={post.data} showDate />)
 	}
 </div>

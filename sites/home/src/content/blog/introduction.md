@@ -1,6 +1,6 @@
 ---
 title: 'Introduction'
-date: '2022-01-16T00:00'
+date: 2022-01-16
 excerpt: 'Introducing myself and this blog.'
 categories: [Meta]
 isDraft: false

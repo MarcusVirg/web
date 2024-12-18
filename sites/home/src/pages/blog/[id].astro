@@ -1,6 +1,6 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content'
-import { onlyFinalPosts } from '../../content/config'
+import { type CollectionEntry, getCollection, render } from 'astro:content'
+import { onlyFinalPosts } from '../../content/content.utils'
 import Layout from '../../layouts/Layout.astro'
 import Categories from '../../components/Categories.astro'
 import Markdown from '../../components/Markdown.astro'
@@ -10,7 +10,7 @@ import CommentList from '../../components/comments/CommentList.svelte'
 export async function getStaticPaths() {
 	const blogCollection = await getCollection('blog', onlyFinalPosts)
 	return blogCollection.map((post) => ({
-		params: { slug: post.slug },
+		params: { id: post.id },
 		props: { post }
 	}))
 }
@@ -18,12 +18,12 @@ export async function getStaticPaths() {
 type Props = {
 	post: CollectionEntry<'blog'>
 }
-
 const { post } = Astro.props
+
 const {
 	Content,
 	remarkPluginFrontmatter: { readingTime }
-} = await post.render()
+} = await render(post)
 ---
 
 <Layout title={post.data.title}>
@@ -54,5 +54,5 @@ const {
 		<Content slot="content" />
 	</Markdown>
 
-	<CommentList client:visible blogId={post.slug} />
+	<CommentList client:visible blogId={post.id} />
 </Layout>

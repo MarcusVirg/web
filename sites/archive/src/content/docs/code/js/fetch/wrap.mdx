@@ -1,0 +1,128 @@
+---
+title: Wrapping Fetch
+description: Wrap fetch to have a common base URL and simplify the promise interface.
+---
+
+It can be helpful to wrap fetch to create a simpler API for yourself.
+
+Here is an example snippet you can copy into your applications.
+
+> Note: If you are using JS only, you can ignore the types at the top.
+
+```ts title="http.ts"
+type EncodedData = {
+	headers: Record<string, any>
+	body: any
+}
+
+type Response<T> =
+	| {
+			status: number
+			data: T
+			error: undefined
+	  }
+	| {
+			status: number
+			data: undefined
+			error: any
+	  }
+interface HTTP {
+	get<T>(url: string, opts?: RequestInit): Promise<Response<T>>
+	post<T>(url: string, data: any, opts?: RequestInit): Promise<Response<T>>
+	put<T>(url: string, data: any, opts?: RequestInit): Promise<Response<T>>
+	delete<T>(url: string, opts?: RequestInit): Promise<Response<T>>
+}
+
+// Replace with your backend domain name
+// This can also come from an ENV variable to populate at build time.
+const BASE_URL = 'api.yourdomain.com/api/v1'
+
+// Optionally you can create a `factory` by passing in BASE_URL instead of defining it
+// function http(baseUrl: string): HTTP { return ... }
+const http: HTTP = {
+	async get(url, opts) {
+		const res = await fetch(BASE_URL + url, {
+			...opts,
+			method: 'GET'
+		})
+		if (!res.ok) {
+			const err = await parseError(res)
+			return { status: res.status, data: undefined, error: err }
+		}
+		return { status: res.status, data: await res.json(), error: undefined }
+	},
+	async post(url, data, opts = {}) {
+		const encoded = encodeData(data)
+		const res = await fetch(BASE_URL + url, {
+			...opts,
+			method: 'POST',
+			headers: {
+				...encoded.headers,
+				...opts.headers
+			},
+			body: encoded.body
+		})
+		if (!res.ok) {
+			const err = await parseError(res)
+			return { status: res.status, data: undefined, error: err }
+		}
+		return { status: res.status, data: await res.json(), error: undefined }
+	},
+	async put(url, data, opts = {}) {
+		const encoded = encodeData(data)
+		const res = await fetch(BASE_URL + url, {
+			...opts,
+			method: 'PUT',
+			headers: {
+				...encoded.headers,
+				...opts.headers
+			},
+			body: encoded.body
+		})
+		if (!res.ok) {
+			const err = await parseError(res)
+			return { status: res.status, data: undefined, error: err }
+		}
+		return { status: res.status, data: await res.json(), error: undefined }
+	},
+	async delete(url, opts) {
+		const res = await fetch(BASE_URL + url, {
+			...opts,
+			method: 'DELETE'
+		})
+		if (!res.ok) {
+			const err = await parseError(res)
+			return { status: res.status, data: undefined, error: err }
+		}
+		return { status: res.status, data: await res.json(), error: undefined }
+	}
+}
+
+function encodeData(data: any): EncodedData {
+	if (data instanceof File) {
+		return { headers: {}, body: data }
+	}
+
+  // Support more content types in here
+
+	return {
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(data)
+	}
+}
+
+async function parseError(res: globalThis.Response) {
+	try {
+		const data = await res.json()
+    // My backend is putting error details in this "details" property. Yours is most likely different.
+		return data.detail
+	} catch (_) {
+    // If we cannot parse the return, just return the statusText
+		return res.statusText
+	}
+}
+
+export default http
+```

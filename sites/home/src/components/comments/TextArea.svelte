@@ -1,15 +1,19 @@
 <script lang="ts">
-	export let name: string
-	export let label: string
-	export let value: string
-	export let error: string = ''
-
-	let textArea: HTMLTextAreaElement | null = null
-
-	$: {
-		if (textArea?.parentNode)
-			(textArea.parentNode as any).dataset.replicatedValue = value
+	type Props = {
+		name: string
+		label: string
+		value: string
+		error?: string
 	}
+	let { name, label, value = $bindable(), error = '' }: Props = $props()
+
+	let textArea: HTMLTextAreaElement | null = $state(null)
+
+	$effect(() => {
+		if (textArea?.parentElement) {
+			textArea.parentElement.dataset.replicatedValue = value
+		}
+	})
 </script>
 
 <div class="flex flex-col space-y-2 w-full">
@@ -23,7 +27,7 @@
 			class="resize-none overflow-hidden appearance-none rounded-md border border-zinc-900/10 bg-white px-3 py-2 shadow-md shadow-zinc-800/5 placeholder:text-zinc-400 focus:border-brand-blue focus:outline-none focus:ring-4 focus:ring-teal-500/10 dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-brand-blue dark:focus:ring-brand-blue/10"
 			{name}
 			bind:value
-		/>
+		></textarea>
 	</div>
 	{#if error}
 		<p class="text-red-600 dark:text-red-400 font-sm">{error}</p>

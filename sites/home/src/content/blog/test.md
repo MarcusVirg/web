@@ -1,6 +1,6 @@
 ---
 title: 'Test Markdown'
-date: '1970-01-01T00:00'
+date: 1970-01-01
 excerpt: "Just a post to test markdown features with Astro"
 categories: [Software, Markdown, Test]
 isDraft: true

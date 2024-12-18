@@ -4,8 +4,11 @@
 	import CommentItem from './CommentItem.svelte'
 	import type { CommentAggregate as Comment } from '../../functions/utils/events'
 
-	export let blogId: string
-	export let comments: Promise<Comment[]> = Promise.resolve([])
+	type Props = {
+		blogId: string
+		comments?: Promise<Comment[]>
+	}
+	let { blogId, comments = $bindable(Promise.resolve([])) }: Props = $props()
 
 	onMount(() => (comments = fetchComments(blogId)))
 
@@ -25,9 +28,9 @@
 		return await res.json()
 	}
 
-	async function addNewComment(event: CustomEvent<Comment>): Promise<Comment[]> {
+	async function addNewComment(comment: Comment): Promise<Comment[]> {
 		const currentComments = await comments
-		comments = Promise.resolve([event.detail, ...currentComments])
+		comments = Promise.resolve([comment, ...currentComments])
 		return comments
 	}
 </script>
@@ -37,14 +40,14 @@
 	{#await comments}
 		{#each Array(4) as _}
 			<div class="mt-8 space-y-4">
-				<div class="animate-pulse bg-zinc-700 h-6 w-24 rounded" />
-				<div class="animate-pulse bg-zinc-700 h-4 w-48 rounded" />
-				<div class="animate-pulse bg-zinc-700 h-4 w-64 rounded" />
-				<div class="animate-pulse bg-zinc-700 h-4 w-56 rounded" />
+				<div class="animate-pulse bg-zinc-700 h-6 w-24 rounded"></div>
+				<div class="animate-pulse bg-zinc-700 h-4 w-48 rounded"></div>
+				<div class="animate-pulse bg-zinc-700 h-4 w-64 rounded"></div>
+				<div class="animate-pulse bg-zinc-700 h-4 w-56 rounded"></div>
 			</div>
 		{/each}
 	{:then comments}
-		<CreateComment {blogId} on:newComment={addNewComment} />
+		<CreateComment {blogId} onNewComment={addNewComment} />
 		<div class="mt-4 flex flex-col divide-y">
 			{#each comments as comment}
 				<CommentItem {comment} />

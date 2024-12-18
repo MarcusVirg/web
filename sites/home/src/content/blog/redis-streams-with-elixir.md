@@ -1,6 +1,6 @@
 ---
 title: 'Redis Streams With Elixir: A Guide to Event Sourcing'
-date: '2023-07-31T00:00'
+date: 2023-07-31
 excerpt: "This guide will show you how to implement a basic event sourcing system with Redis, Elixir, and Redix."
 categories: [Software, Full Stack, Redis, Elixir]
 isDraft: false

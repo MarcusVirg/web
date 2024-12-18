@@ -43,6 +43,7 @@ function functionFactory<F extends Function>(runFunc: F, opts: FactoryOptions = 
 			// Rate limit
 			if (opts.rateLimit) {
 				const rateLimiter = new Ratelimit({
+					// @ts-ignore-next-line
 					redis,
 					ephemeralCache: rateLimitCache,
 					limiter: Ratelimit.fixedWindow(
