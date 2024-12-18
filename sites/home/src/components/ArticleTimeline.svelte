@@ -29,8 +29,10 @@
 		{#each filteredPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()) as post}
 			<div class="flex flex-nowrap">
 				<div class="relative">
-					<div class="absolute w-4 h-4 bg-zinc-800 rounded-full -left-[7px] top-8" />
-					<div class="w-[3px] h-full bg-zinc-800" />
+					<div
+						class="absolute w-4 h-4 bg-zinc-800 rounded-full -left-[7px] top-8"
+					></div>
+					<div class="w-[3px] h-full bg-zinc-800"></div>
 				</div>
 				<div class="py-8 px-4 pl-12 flex-1">
 					<Article slug={post.slug} post={post.data} showDate />

@@ -1,15 +1,18 @@
 <script lang="ts">
 	import type { CollectionEntry } from 'astro:content'
 
-	export let slug: string
-	export let post: CollectionEntry<'blog'>['data']
-	export let showDate = false
+	type Props = {
+		slug: string
+		post: CollectionEntry<'blog'>['data']
+		showDate?: boolean
+	}
+	let { slug, post, showDate = false }: Props = $props()
 </script>
 
 <article class="group relative flex flex-col">
 	{#if showDate}
 		<div class="flex items-center mb-3 space-x-3.5 relative z-10">
-			<div aria-hidden="true" class="h-4 w-0.5 rounded-full bg-zinc-500" />
+			<div aria-hidden="true" class="h-4 w-0.5 rounded-full bg-zinc-500"></div>
 			<time class="text-sm text-zinc-500" datetime={post.date.toISOString()}>
 				{post.date.toLocaleDateString('en-US', {
 					month: 'long',
@@ -22,11 +25,10 @@
 	<h2 class="font-semibold tracking-wider text-zinc-100 mb-3">
 		<div
 			class="absolute -inset-y-6 -inset-x-4 z-0 scale-95 bg-zinc-800/50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 sm:-inset-x-6 sm:rounded-2xl"
-		/>
+		></div>
 		<a href={`/blog/${slug}`} rel="prefetch" data-astro-prefetch>
-			<span
-				class="absolute -inset-y-6 -inset-x-4 z-20 sm:-inset-x-6 sm:rounded-2xl"
-			/>
+			<span class="absolute -inset-y-6 -inset-x-4 z-20 sm:-inset-x-6 sm:rounded-2xl"
+			></span>
 			<span class="relative z-10">{post.title}</span>
 		</a>
 	</h2>

@@ -1,6 +1,6 @@
 ---
 title: 'Reservation Pattern With Redis: A Guide to Event Sourcing'
-date: '2023-07-25T00:00'
+date: 2023-07-25
 excerpt: "This guide will show you how to implement the reservation pattern with Redis, Elixir, and Redix."
 categories: [Software, Full Stack, Redis, Elixir]
 isDraft: true

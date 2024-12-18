@@ -1,6 +1,6 @@
 ---
 title: 'Interacting with Contacts on the Web'
-date: '2023-12-15T00:00'
+date: 2023-12-15
 excerpt: 'A combination of a Safari user guide and developer guide for the Contact Picker Web API.'
 categories: [Software, Web API, PWA]
 isDraft: false

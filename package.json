@@ -1,6 +1,7 @@
 {
 	"name": "web",
 	"version": "0.1.0",
+	"type": "module",
 	"private": true,
 	"workspaces": [
 		"sites/*"
@@ -12,5 +13,8 @@
 		"home:dev": "npm run --prefix sites/home dev",
 		"home:build": "npm run --prefix sites/home build",
 		"home:preview": "npm run --prefix sites/home preview"
+	},
+	"devDependencies": {
+		"prettier": "^3.4.2"
 	}
 }

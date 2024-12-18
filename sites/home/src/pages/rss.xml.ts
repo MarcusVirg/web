@@ -1,6 +1,6 @@
 import rss from '@astrojs/rss'
 import { getCollection } from 'astro:content'
-import { onlyFinalPosts } from '../content/config'
+import { onlyFinalPosts } from '../content/content.utils'
 
 export async function GET() {
 	const blogCollection = await getCollection('blog', onlyFinalPosts)

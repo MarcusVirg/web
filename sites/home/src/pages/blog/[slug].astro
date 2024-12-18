@@ -1,6 +1,6 @@
 ---
 import { type CollectionEntry, getCollection } from 'astro:content'
-import { onlyFinalPosts } from '../../content/config'
+import { onlyFinalPosts } from '../../content/content.utils'
 import Layout from '../../layouts/Layout.astro'
 import Categories from '../../components/Categories.astro'
 import Markdown from '../../components/Markdown.astro'
@@ -9,7 +9,7 @@ import CommentList from '../../components/comments/CommentList.svelte'
 
 export async function getStaticPaths() {
 	const blogCollection = await getCollection('blog', onlyFinalPosts)
-	return blogCollection.map((post) => ({
+	return blogCollection.map(post => ({
 		params: { slug: post.slug },
 		props: { post }
 	}))
