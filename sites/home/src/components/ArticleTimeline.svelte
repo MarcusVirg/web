@@ -6,17 +6,17 @@
 		posts: CollectionEntry<'blog'>[]
 	}
 	let { posts }: Props = $props()
-	let selectedCategory = 'All Categories'
+	let selectedCategory = $state('All Categories')
 
 	const categories = $derived([
 		'All Categories',
 		...new Set(posts.map((post) => post.data.categories).flat())
 	])
-	const filteredPosts = $derived(
-		selectedCategory === 'All Categories'
-			? posts
-			: posts.filter((post) => post.data.categories.includes(selectedCategory))
-	)
+	const filteredPosts = $derived.by(() => {
+		if (selectedCategory === 'All Categories') return posts
+
+		return posts.filter((post) => post.data.categories.includes(selectedCategory))
+	})
 </script>
 
 <section>
@@ -30,7 +30,7 @@
 	</select>
 
 	<div class="mt-8">
-		{#each filteredPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()) as post}
+		{#each filteredPosts.toSorted((a, b) => b.data.date.getTime() - a.data.date.getTime()) as post}
 			<div class="flex flex-nowrap">
 				<div class="relative">
 					<div
