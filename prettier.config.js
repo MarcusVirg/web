@@ -7,6 +7,7 @@ const config = {
   tabWidth: 2,
   semi: false,
   singleQuote: true,
+  arrowParens: "always",
   trailingComma: "none",
   printWidth: 85,
   svelteSortOrder: "scripts-markup-styles-options",

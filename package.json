@@ -7,14 +7,18 @@
 		"sites/*"
 	],
 	"scripts": {
-		"archive:dev": "npm run --prefix sites/archive dev",
-		"archive:build": "npm run --prefix sites/archive build",
-		"archive:preview": "npm run --prefix sites/archive preview",
-		"home:dev": "npm run --prefix sites/home dev",
-		"home:build": "npm run --prefix sites/home build",
-		"home:preview": "npm run --prefix sites/home preview"
+		"archive:dev": "npm run --workspace sites/archive dev",
+		"archive:build": "npm run --workspace sites/archive build",
+		"archive:preview": "npm run --workspace sites/archive preview",
+		"home:dev": "npm run --workspace sites/home dev",
+		"home:build": "npm run --workspace sites/home build",
+		"home:preview": "npm run --workspace sites/home preview"
 	},
 	"devDependencies": {
-		"prettier": "^3.4.2"
+		"prettier": "^3.4.2",
+		"typescript": "^5.7.2"
+	},
+	"overrides": {
+		"esrap": "~1.2.0"
 	}
 }

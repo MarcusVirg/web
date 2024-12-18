@@ -1,7 +1,10 @@
 <script lang="ts">
 	import type { CommentAggregate as Comment } from '../../functions/utils/events'
 
-	export let comment: Comment
+	type Props = {
+		comment: Comment
+	}
+	let { comment }: Props = $props()
 </script>
 
 <div class="border-zinc-800 py-4 space-y-2">

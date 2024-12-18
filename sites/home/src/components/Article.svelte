@@ -2,11 +2,11 @@
 	import type { CollectionEntry } from 'astro:content'
 
 	type Props = {
-		slug: string
+		id: string
 		post: CollectionEntry<'blog'>['data']
 		showDate?: boolean
 	}
-	let { slug, post, showDate = false }: Props = $props()
+	let { id, post, showDate = false }: Props = $props()
 </script>
 
 <article class="group relative flex flex-col">
@@ -26,7 +26,7 @@
 		<div
 			class="absolute -inset-y-6 -inset-x-4 z-0 scale-95 bg-zinc-800/50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 sm:-inset-x-6 sm:rounded-2xl"
 		></div>
-		<a href={`/blog/${slug}`} rel="prefetch" data-astro-prefetch>
+		<a href={`/blog/${id}`} rel="prefetch" data-astro-prefetch>
 			<span class="absolute -inset-y-6 -inset-x-4 z-20 sm:-inset-x-6 sm:rounded-2xl"
 			></span>
 			<span class="relative z-10">{post.title}</span>

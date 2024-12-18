@@ -1,8 +1,11 @@
 <script lang="ts">
-	export let name: string
-	export let label: string
-	export let value: string
-	export let error: string = ''
+	type Props = {
+		name: string
+		label: string
+		value: string
+		error?: string
+	}
+	let { name, label, value = $bindable(), error = '' }: Props = $props()
 </script>
 
 <div class="flex flex-col space-y-2 w-full">
