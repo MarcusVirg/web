@@ -4,7 +4,7 @@ description: 'Determinants of health assessment platform for researchers.'
 logo: './images/msmh-logo.png'
 website: 'https://assessment.mystrengths.ahc.umn.edu'
 categories: [Analytics, Koa, Postgres, React]
-sortOrder: 3
+sortOrder: 4
 isDraft: false
 ---
 
