@@ -3,8 +3,8 @@ title: 'Resplice'
 description: 'Solving identity by changing the way we connect & share.'
 logo: './images/resplice-logo.png'
 website: 'https://www.resplice.com'
-categories: [Elixir, Svelte, PWA]
-sortOrder: 1
+categories: [Elixir, Svelte, PWA, Startup]
+sortOrder: 2
 isDraft: false
 ---
 
