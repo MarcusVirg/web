@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte'
 	import CreateComment from './CreateComment.svelte'
 	import CommentItem from './CommentItem.svelte'
-	import type { CommentAggregate as Comment } from '../../functions/utils/events'
+	import type { CommentAggregate as Comment } from '../../comments/types'
 
 	type Props = {
 		blogId: string
@@ -13,7 +13,7 @@
 	onMount(() => (comments = fetchComments(blogId)))
 
 	async function fetchComments(blogId: string): Promise<Comment[]> {
-		const res = await fetch(`/.netlify/functions/get-comments?blogId=${blogId}`)
+		const res = await fetch(`/api/comments?blogId=${encodeURIComponent(blogId)}`)
 
 		if (!res.ok) {
 			let error

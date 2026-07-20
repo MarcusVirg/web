@@ -1,0 +1,24 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "marcusv-home",
+	"main": "src/worker.ts",
+	"compatibility_date": "2026-07-19",
+	"workers_dev": false,
+	"preview_urls": true,
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS",
+		"run_worker_first": true
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "marcusv-home",
+			"database_id": "__D1_DATABASE_ID__",
+			"migrations_dir": "migrations"
+		}
+	],
+	"secrets": {
+		"required": ["COMMENT_ADMIN_TOKEN"]
+	}
+}

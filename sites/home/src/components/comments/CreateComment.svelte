@@ -1,10 +1,10 @@
 <script lang="ts">
 	import CommentForm from './CommentForm.svelte'
-	import type { CommentAggregate as Comment } from '../../functions/utils/events'
+	import type { CommentAggregate as Comment } from '../../comments/types'
 
 	type Props = {
 		blogId: string
-		onNewComment: (comment: any) => void
+		onNewComment: (comment: Comment) => void
 	}
 	let { blogId, onNewComment }: Props = $props()
 
@@ -17,8 +17,9 @@
 	let error: string | null = $state(null)
 
 	async function addComment() {
-		const res = await fetch('/.netlify/functions/add-comment', {
+		const res = await fetch('/api/comments', {
 			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(comment)
 		})
 		if (!res.ok) {

@@ -12,7 +12,10 @@
 		"archive:preview": "npm run --workspace sites/archive preview",
 		"home:dev": "npm run --workspace sites/home dev",
 		"home:build": "npm run --workspace sites/home build",
-		"home:preview": "npm run --workspace sites/home preview"
+		"home:preview": "npm run --workspace sites/home preview",
+		"home:cloudflare:dev": "npm run --workspace sites/home cloudflare:dev",
+		"home:cloudflare:dry-run": "npm run --workspace sites/home cloudflare:dry-run",
+		"home:cloudflare:deploy": "npm run --workspace sites/home cloudflare:deploy"
 	},
 	"devDependencies": {
 		"prettier": "^3.4.2",

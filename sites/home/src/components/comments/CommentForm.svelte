@@ -1,7 +1,7 @@
 <script lang="ts">
 	import TextArea from './TextArea.svelte'
 	import TextField from './TextField.svelte'
-	import type { CommentAggregate } from '../../functions/utils/events'
+	import type { CommentAggregate } from '../../comments/types'
 
 	type Props = {
 		comment: Pick<CommentAggregate, 'author' | 'comment'>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { CommentAggregate as Comment } from '../../functions/utils/events'
+	import type { CommentAggregate as Comment } from '../../comments/types'
 
 	type Props = {
 		comment: Comment

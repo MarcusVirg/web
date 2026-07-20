@@ -1,8 +1,8 @@
 import { defineConfig } from 'astro/config'
+import { unified } from '@astrojs/markdown-remark'
 import sitemap from '@astrojs/sitemap'
 import svelte from '@astrojs/svelte'
 import tailwindcss from '@tailwindcss/vite'
-import icon from 'astro-icon'
 import getReadingTime from 'reading-time'
 import { toString } from 'mdast-util-to-string'
 
@@ -17,12 +17,13 @@ function readingTime() {
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://marcusv.me',
-	integrations: [sitemap(), svelte(), icon()],
+	integrations: [sitemap(), svelte()],
+	compressHTML: true,
 	vite: {
 		plugins: [tailwindcss()]
 	},
 	markdown: {
-		remarkPlugins: [readingTime],
+		processor: unified({ remarkPlugins: [readingTime] }),
 		shikiConfig: {
 			theme: 'one-dark-pro'
 		}

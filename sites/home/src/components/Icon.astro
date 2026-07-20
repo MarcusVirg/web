@@ -1,12 +1,41 @@
 ---
-// @ts-ignore
-import { Icon } from 'astro-icon/components'
+import type { SvgComponent } from 'astro/types'
+import Briefcase from '../icons/briefcase.svg'
+import ChevronBack from '../icons/chevron-back.svg'
+import ChevronForward from '../icons/chevron-forward.svg'
+import CodeSlash from '../icons/code-slash.svg'
+import LogoGithub from '../icons/logo-github.svg'
+import LogoInstagram from '../icons/logo-instagram.svg'
+import LogoLinkedin from '../icons/logo-linkedin.svg'
+import LogoMastodon from '../icons/logo-mastodon.svg'
+import LogoRss from '../icons/logo-rss.svg'
+import Mail from '../icons/mail.svg'
+import Planet from '../icons/planet.svg'
+
+const icons: Record<string, SvgComponent> = {
+	briefcase: Briefcase,
+	'chevron-back': ChevronBack,
+	'chevron-forward': ChevronForward,
+	'code-slash': CodeSlash,
+	'logo-github': LogoGithub,
+	'logo-instagram': LogoInstagram,
+	'logo-linkedin': LogoLinkedin,
+	'logo-mastodon': LogoMastodon,
+	'logo-rss': LogoRss,
+	mail: Mail,
+	planet: Planet
+}
 
 type Props = {
 	class?: string
 	name: string
 }
 const { class: className = '', name } = Astro.props
+const Svg = icons[name]
+
+if (!Svg) {
+	throw new Error(`Unknown icon: ${name}`)
+}
 ---
 
-<Icon class={className} name={name} />
+<Svg class={className} data-icon />

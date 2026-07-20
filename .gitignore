@@ -1,1 +1,18 @@
 node_modules
+
+# macOS
+.DS_Store
+.TODO.md
+
+# Terraform working data and local configuration
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+backend.hcl
+
+# Cloudflare generated configuration and local secrets
+sites/home/.wrangler/
+sites/home/wrangler.generated.jsonc
+sites/home/.dev.vars*
+sites/home/.env.production
