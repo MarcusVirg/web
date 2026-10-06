@@ -3,6 +3,7 @@ node_modules
 # macOS
 .DS_Store
 .TODO.md
+.env
 
 # Terraform working data and local configuration
 **/.terraform/*

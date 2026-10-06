@@ -65,14 +65,14 @@ terraform -chdir=infra/common import cloudflare_zone.primary "your-zone-id"
 ```
 
 In **R2 > Manage API Tokens**, create an **Object Read & Write** token scoped
-only to `marcusv-terraform-state`. This token is for the S3-compatible state
+only to `infra`. This token is for the S3-compatible state
 backend and is separate from `CLOUDFLARE_API_TOKEN`:
 
 ```sh
 export AWS_ACCESS_KEY_ID="your-r2-access-key-id"
 read -r -s AWS_SECRET_ACCESS_KEY
 export AWS_SECRET_ACCESS_KEY
-export TF_STATE_BUCKET="marcusv-terraform-state"
+export TF_STATE_BUCKET="infra"
 ```
 
 Create the ignored backend configuration and replace the account ID placeholder:

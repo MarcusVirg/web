@@ -39,7 +39,7 @@ resource "cloudflare_zone_setting" "always_use_https" {
 resource "cloudflare_zone_setting" "minimum_tls" {
   zone_id    = cloudflare_zone.primary.id
   setting_id = "min_tls_version"
-  value      = "1.2"
+  value      = "1.3"
 }
 
 resource "cloudflare_r2_bucket" "terraform_state" {

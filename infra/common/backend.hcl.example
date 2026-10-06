@@ -1,4 +1,4 @@
-bucket = "marcusv-terraform-state"
+bucket = "infra"
 key    = "states/common.tfstate"
 region = "auto"
 
