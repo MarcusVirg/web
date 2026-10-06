@@ -103,9 +103,15 @@ export const usesData: [string, UsesItem[]][] = [
 		'Design',
 		[
 			{
+				title: 'Google Stitch',
+				description:
+					'I use Google Stitch for initial design exploration and trying out interactions for the products I build. It helps me explore ideas before moving into more detailed mockups.',
+				link: 'https://stitch.withgoogle.com/'
+			},
+			{
 				title: 'Figma',
 				description:
-					'This is the best collaborative design tool hands down. I use it for all my design work whether I am making app screens, twitch backgrounds, or resumes. Seriously why are you using anything else?',
+					'Figma is still my go-to for high fidelity mockups. Once I have a direction, I use it to work through the details and refine the design.',
 				link: 'https://www.figma.com/'
 			}
 		]
@@ -114,10 +120,16 @@ export const usesData: [string, UsesItem[]][] = [
 		'Productivity',
 		[
 			{
-				title: 'Notion',
+				title: 'Codex',
 				description:
-					'My go to for note taking, task management, and project management. I like that notion can be as simple or as complex as you would like it to be. It has had some issues with slow page loads and authentication in the past but they continue to improve the performance and reliability of the product. I highly recommend it to help you run your personal life or business.',
-				link: 'https://www.notion.so/'
+					'I use Codex alongside Obsidian to organize my life and manage tasks. It has become a regular part of how I keep track of what I need to do.',
+				link: 'https://openai.com/codex/'
+			},
+			{
+				title: 'Obsidian',
+				description:
+					"Obsidian is where I keep my personal wiki. Its agent support isn't great, but I like its features and plugins for organizing and maintaining my notes in a predictable, deterministic way.",
+				link: 'https://obsidian.md/'
 			},
 			{
 				title: 'YNAB',
@@ -131,21 +143,21 @@ export const usesData: [string, UsesItem[]][] = [
 		'Dev',
 		[
 			{
-				title: 'Visual Studio Code',
+				title: 'Zed',
 				description:
-					'Like many others, I switched to VS Code after trying a few different text editors during my college years. The plugins and community around the editor allows it to support any language really. I have learned enough keyboard shortcuts to make myself fairly productive in it, maybe not to the level of those Vim wizards but close enough. I am currently using the One Dark Pro theme.',
-				link: 'https://code.visualstudio.com'
+					"I recently switched to Zed and like it much better. The plugin ecosystem isn't growing as quickly as the VSCode ecosystem, but it is still a great everyday editor.",
+				link: 'https://zed.dev/'
 			},
 			{
 				title: 'WSL2',
 				description:
-					'Because my main workstation is running Windows, doing development there tends to be a bit painful... This is where WSL2 comes in. It basically gives me a full Linux environment that has its own file system but also has access to the Windows file system. I install all of my development tools and code in the WSL2 file system. The VS Code WSL extension works very well and allows me to use zsh in the integrated terminal. This is the only way I would recommend developing in a Windows environment.'
+					'Because my main workstation is running Windows, doing development there tends to be a bit painful... This is where WSL2 comes in. It basically gives me a full Linux environment that has its own file system but also has access to the Windows file system. I install all of my development tools and code in the WSL2 file system. This is the only way I would recommend developing in a Windows environment.'
 			},
 			{
-				title: 'Dev Containers',
+				title: 'Codex',
 				description:
-					"For anything other than node based projects, I use VS Code development containers as dev environments. These are great because you can create your dev environment inside a container with all the required depedencies of your project's toolchain. You can use VS Code to build and then exec into these containers, as well install extensions that you specify in your container configuration.",
-				link: 'https://code.visualstudio.com/docs/devcontainers/containers'
+					'Codex is my daily driver for building software. I use both the CLI and the app as part of my everyday development workflow.',
+				link: 'https://openai.com/codex/'
 			}
 		]
 	],
@@ -153,40 +165,46 @@ export const usesData: [string, UsesItem[]][] = [
 		'Preferred Stack',
 		[
 			{
-				title: 'Svelte (Base Framework & Apps)',
+				title: 'React (Base Framework & Apps)',
 				description:
-					"This is a great reactive framework for building web apps or even static websites using a component model. The framework is really simple and small since it doesn't ship a huge runtime with it. It also has a bunch of nice built-ins such as svelte stores and spring animations.",
-				link: 'https://svelte.dev/'
+					'I prefer React for building web apps. The ecosystem is better for what I build, and AI models know React much better, which makes it a natural fit for how I work.',
+				link: 'https://react.dev/'
 			},
 			{
 				title: 'Astro (Static Sites)',
 				description:
-					'Astro is my go-to for building content-focused static sites, including this website. It feels like a super-powered templating engine that lets you use svelte components and render them to HTML during build or allow svelte to run on the client with their Islands Architecture. I like that everything defaults to shipping no javascript. I would really like to see the Astro community grow.',
+					'Astro is my go-to for building content-focused static sites, including this website. It feels like a super-powered templating engine, with an Islands Architecture that lets me add interactive components where I need them. I like that everything defaults to shipping no javascript. I would really like to see the Astro community grow.',
 				link: 'https://astro.build/'
 			},
 			{
 				title: 'Tailwind CSS (Styling)',
 				description:
-					'Tailwind with a component based framework like svelte is like having super powers. I know there are some strong opinions towards Tailwind but I have found it really does reduce styling friction in my projects, not having to context switch between files and having view logic, styling, and structure all in one file is amazing. It would be hard for me to go back to writing vanilla CSS.',
+					'Tailwind with a component based library like React is like having super powers. I know there are some strong opinions towards Tailwind but I have found it really does reduce styling friction in my projects, not having to context switch between files and having view logic, styling, and structure all in one file is amazing. It would be hard for me to go back to writing vanilla CSS.',
 				link: 'https://tailwindcss.com/'
 			},
 			{
-				title: 'Tauri (Native Mobile and Desktop Apps)',
+				title: 'Flutter (Mobile and Desktop Apps)',
 				description:
-					'I have yet to use Tauri to build a production application but I have played around with it and it seems like a really nice solution for writing mobile and desktop native applications. I can write apps in web technologies like Svelte and compile them to native platforms using their native web views and runtime. It also lets you write Rust code to interact with the platform you are running on.',
-				link: 'https://tauri.app/'
+					'Flutter is my choice for building apps across platforms. I like its performance and the ability to build for mobile and desktop from a shared codebase.',
+				link: 'https://flutter.dev/'
 			},
 			{
-				title: 'Deno & Oak (APIs)',
+				title: 'Elixir, Plug & Cowboy (APIs)',
 				description:
-					'Deno is a great runtime especially since it has TS support built in. It feels like a next generation of Node as it stays closer to the native web platform and has nice security features built-in. The tooling is also a little better when developing deno applications. Many of the edge runtimes support running Deno apps. Oak is also a simple http library to use as everything is just an entry in a stack of middlewares.',
-				link: 'https://deno.land/'
+					'Elixir with Plug and Cowboy is now my preferred stack for APIs. Elixir is great for building concurrent applications, and its functional programming style fits the way I like to write software.',
+				link: 'https://elixir-lang.org/'
 			},
 			{
 				title: 'Rust (High performance or critical system components)',
 				description:
-					'I would use Rust across the stack to write any system components that need to be high performance or need to be correct. You could use Rust compiled to WASM to build a high performance search index in a web app. It is also great for heavy CPU bound tasks on the backend, calling into Rust from the Deno runtime to process an image for example.',
+					'I would use Rust across the stack to write any system components that need to be high performance or need to be correct. You could use Rust compiled to WASM to build a high performance search index in a web app. It is also great for heavy CPU bound tasks on the backend, such as image processing.',
 				link: 'https://www.rust-lang.org/'
+			},
+			{
+				title: 'Cloudflare Services',
+				description:
+					'I like Cloudflare for its extremely generous free tier and useful cloud primitives. Object storage, durable execution with Workflows, AI Search, and AI Gateway are some of the services I reach for when building products.',
+				link: 'https://www.cloudflare.com/developer-platform/'
 			},
 			{
 				title: 'PostgreSQL (Database)',
